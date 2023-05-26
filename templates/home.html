@@ -1,0 +1,310 @@
+
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  
+   
+
+<style>
+    .primary-btn {
+        /* Add your regular button styles */
+        background-color: #c96e0c;
+        color: #333;
+        padding: 10px 20px;
+        text-decoration: none;
+        border: 2px solid #333;
+        transition: background-color 0.1s, color 0.2s;
+      }
+      
+      .primary-btn:hover {
+        /* Add your hover styles */
+        background-color: transparent;
+        color: #c96e0c;
+      }
+      
+</style>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Search model -->
+	<div class="search-model">
+		<div class="h-100 d-flex align-items-center justify-content-center">
+			<div class="search-close-switch">+</div>
+			<form class="search-model-form">
+				<input type="text" id="search-input" placeholder="Search here.....">
+			</form>
+		</div>
+	</div>
+	<!-- Search model end -->
+
+    <!-- Header Info Begin -->
+    <div class="header-info" style="margin-top: 10px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="header-item">
+                        <img src="{% static 'img/icons/delivery.png' %}" alt="">
+                        <p>Free shipping on orders over $30 in USA</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-left text-lg-center">
+                    <div class="header-item">
+                        <img src="{% static 'img/icons/voucher.png' %}" alt="">
+                        <p>20% Student Discount</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-left text-xl-right">
+                    <div class="header-item">
+                    <img src="{% static 'img/icons/sales.png' %}" alt="">
+                    <p>30% off on dresses. Use code: 30OFF</p>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Headerd Info End -->
+    <!-- Header End -->
+
+    <!-- Hero Slider Begin -->
+    <section class="hero-slider">
+        <div class="hero-items owl-carousel">
+            <div class="single-slider-item set-bg" data-setbg="{% static 'img/bnr1.jpg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="text-white text-left display-4" style="font-family: 'Arial', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); line-height: 1.2;">
+                                STREET<br>WEARS
+                            </h1>
+                            
+                            <h3 class="text-left mt-2" style="font-family: 'Arial', sans-serif; font-weight: bold; color: #333; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+                                MEN'S STYLE<br>ADVISOR, AND<br>WARDROBE EXPERT
+                            </h3>
+                            
+                            <a href="{% url 'signin' %}" class="primary-btn">See More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-slider-item set-bg" data-setbg="{% static 'img/Man Fashion.jpeg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="text-white ">STREET <br> WEARS</h1>
+                            <h3>MEN'S STYLE <br> ADVISOR,AND <br> WARDROBE EXPERT</h3>
+                            <a href="{% url 'signin' %}" class="primary-btn">See More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-slider-item set-bg" data-setbg="{% static 'img/new.webp' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="text-dark text-left display-4">STREET <br> WEARS</h1>
+                            <h3 class="text-left mt-2" style="font-family: 'Arial', sans-serif; font-weight: bold; color: #333; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+                                MEN'S STYLE<br>ADVISOR, AND<br>WARDROBE EXPERT
+                            </h3>
+                            
+                            <a href="{% url 'signin' %}" class="primary-btn">See More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Slider End -->
+
+    <!-- Features Section Begin -->
+    <section class="features-section spad">
+        <div class="features-ads">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="single-features-ads first">
+                            <img src="{% static 'img/icons/f-delivery.png' %}" alt="">
+                            <h4>Free shipping</h4>
+                            <p>Fusce urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal
+                                esuada aliquet libero viverra cursus. </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="single-features-ads second">
+                            <img src="{% static 'img/icons/coin.png' %}" alt="">
+                            <h4>100% Money back </h4>
+                            <p>Urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal esuada
+                                aliquet libero viverra cursus. </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="single-features-ads">
+                            <img src="{% static 'img/icons/chat.png' %}" alt="">
+                            <h4>Online support 24/7</h4>
+                            <p>Urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal esuada
+                                aliquet libero viverra cursus. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Features Box -->
+        <div class="features-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="single-box-item first-box">
+                                    <img src="{% static 'img/thor2.jpeg' %}" alt="">
+                                    <div class="box-text text-dark">
+                                        <span class="trend-year">2023 Trend</span>
+                                        <h2>Jacket</h2>
+                                        <span class="trend-alert">Trend Allert</span>
+                                        <a href="{% url 'signin' %} " class="primary-btn">See More</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="single-box-item second-box">
+                                    <img src="{% static 'img/thor1.jpeg' %}" alt="">
+                                    <div class="box-text">
+                                        <span class="trend-year mb-3 ">2 <br> 0 <br> 2 <br> 3 <br> Trend</span>
+                                        <h2 class="text-white mt-4">Hoodies</h2>
+                                        <!-- <span class="trend-alert">Bold & Grey</span> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="single-box-item large-box">
+                            <img src="{% static 'img/f-box-3.jpg' %}" alt="">
+                            <div class="box-text">
+                                <span class="trend-year">2023 Party</span>
+                                <h2>Collection</h2>
+                                <div class="trend-alert">Trend Allert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section End -->
+
+    <!-- Latest Product Begin -->
+    <section class="latest-products spad">
+        <div class="container">
+            <div class="product-filter">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <div class="section-title">
+                            <h2>Latest Products</h2>
+                        </div>
+                        <ul class="product-controls">
+                            <!-- <a href="{% url 'store' %}"><li data-filter="*">All  </li></a> -->
+                            {% for category in links %}
+                            <li data-filter=".dresses"><a href="{{category.get_url}}" class="text-dark">{{category.category_name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- product starting -->
+            <div class="row" id="product-list">
+                {% for product in products %}
+                <div class="col-lg-4 col-sm-6 mix all dresses bags">
+                    <div class="single-product-item">
+                        <figure>
+                            <a href="{{ product.get_url }}"><img src="{{product.images.url}}" alt=""></a>
+                            <div class="p-status">new</div>
+                        </figure>
+                        <div class="product-text">
+                            <a href="{{ product.get_url }}" class="title text-dark">{{product.product_name}}</a>
+                            <p>Rs. {{product.price}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+            </div>
+        </div>
+    </section>
+    <!-- Latest Product End -->
+
+    <!-- Lookbok Section Begin -->
+    <section class="lookbok-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4 offset-lg-1">
+                    <div class="lookbok-left">
+                        <div class="section-title">
+                            <h2>Wolverine <br />Watch Your own <br>Modern Men</h2>
+                        </div>
+                        <p>Fusce urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vestibulum malesuada
+                            aliquet libero viverra cursus. Aliquam erat volutpat. Morbi id dictum quam, ut commodo
+                            lorem. In at nisi nec arcu porttitor aliquet vitae at dui. Sed sollicitudin nulla non leo
+                            viverra scelerisque. Phasellus facilisis lobortis metus, sit amet viverra lectus finibus ac.
+                            Aenean non felis dapibus, placerat libero auctor, ornare ante. Morbi quis ex eleifend,
+                            sodales nulla vitae, scelerisque ante. Nunc id vulputate dui. Suspendisse consectetur rutrum
+                            metus nec scelerisque. s</p>
+                        <a href="{% url 'signin' %}" class="primary-btn look-btn">See More</a>
+                    </div>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="lookbok-pic">
+                        <img src="{% static 'img/thr.jpg' %}" alt="">
+                        <div class="pic-text">fashion</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Lookbok Section End -->
+
+    <!-- Logo Section Begin -->
+    <div class="logo-section spad">
+        <div class="logo-items owl-carousel">
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-1.png' %}" alt="">
+            </div>
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-2.png' %}" alt="">
+            </div>
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-3.png' %}" alt="">
+            </div>
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-4.png' %}" alt="">
+            </div>
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-5.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- Logo Section End -->
+
+
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slicknav.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+      
+</body>
+
+</html>
+{% endblock %}

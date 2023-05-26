@@ -1,0 +1,152 @@
+   {% load static %}
+   <!-- Header Section Begin -->
+   <style>
+    .logo-name{
+        color: #000000;
+        font-weight: 800;
+        font-size: 30px;
+        letter-spacing: 4px;
+        text-decoration: none;
+    }
+
+    .form-control {
+        border: 2px solid #ddd;
+        background-color: #f7f7f7;
+        color: #333;
+        padding: 8px;
+      }
+      
+      .form-control::placeholder {
+        color: #999;
+      }
+
+    .logo-name {
+        font-size: 2rem;
+        color: #353232; /* Replace with your desired color */
+        text-decoration: none;
+    }
+    
+    .logo-accent {
+        color:  #B0BCC2; /* Replace with your desired color */
+    }
+    
+
+    .input-group {
+        position: relative;
+    }
+    
+    .input-group:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        border-radius: 4px;
+        box-shadow: 0 0 0 2px #ccc;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .input-group:hover:before,
+    .input-group:focus:before {
+        opacity: 1;
+    }
+
+    .form-control {
+        transition: box-shadow 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #ffcc00;
+    }
+
+    .btn-primary {
+        background-color: #B0BCC2;
+        border-color: #B0BCC2;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background-color: #353232;
+        border-color: #353232;
+    }
+      
+   </style>
+    <header class="header-section">
+        <div class="container-fluid">
+            <div class="inner-header">
+                <div class="logo">
+                    <a href="{% url 'home' %}" class="logo-name">hu<span class="logo-accent">M</span>EN</a>
+                    <img src="{% static 'img/humenlogo.jpg' %}" alt="logo" style="max-width: 90px;">
+                </div>
+                
+                <div class="header-right">
+                    <form action="{% url 'search' %}" class="search" method="GET">
+                        <div class="input-group w-30">
+                          <input type="text" class="form-control" style="width:50%;" placeholder="Search" name="keyword" id="searchInput">
+                          <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </form>
+                    
+                    <img src="{% static 'img/icons/man.png' %}" alt="">
+                    <a href="{% url 'cart' %}" class="text-dark">
+                        <!-- <img src="{% static 'img/icons/bag.png' %}" alt=""> -->
+                        <i class="fa-sharp fa-solid fa-cart-shopping"></i>
+                        <span>{{cart_count}}</span>
+                    </a>
+                </div>
+                {% if user.id is  None %}  
+                <div class="user-access">
+                    <div>
+                        <small class="title text-dark">guest</small>
+                    </div>
+                    <a href="{% url 'register' %}">Register</a>
+                    <a href="{% url 'signin' %}" class="">| Sign in</a>
+                </div>
+                {% else %}
+                <div class="user-access">
+                    <div>
+                        <small class="title text-dark">Welcome {{user.first_name}}</small>
+                    </div>
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+                    <a href="{% url 'signout' %}" class="">| Logout</a>
+                </div>
+                {% endif %} 
+                <nav class="main-menu mobile-menu">
+                    <ul>
+                        <li><a class="active" href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'store' %}">Shop</a></li>
+                        <!-- <li><a href="./product-page.html">All Category</a>
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'store' %}">All Products</a></li>
+                                {% for category in links %}
+                                  <li><a href="{{category.get_url}}">{{category.category_name}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li> -->
+                        <li><a href="#">Wishlist</a></li>
+                        <li><a href="{% url 'cart' %}">Cart</a></li>
+                        <li><a href="{% url 'my_orders' %}">Orders</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+      
+        searchInput.addEventListener('focus', () => {
+          searchInput.parentNode.classList.add('focused');
+        });
+      
+        searchInput.addEventListener('blur', () => {
+          searchInput.parentNode.classList.remove('focused');
+        });
+    </script>
+    <script src="https://kit.fontawesome.com/1370530da8.js" crossorigin="anonymous"></script>

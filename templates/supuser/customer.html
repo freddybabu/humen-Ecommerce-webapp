@@ -1,0 +1,167 @@
+{% extends "supuser/supbase.html" %}
+  {% load static %}
+{% block content %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+<nav class="navbar navbar-expand-xl">
+  <div class="container h-100">
+      <a class="navbar-brand" href="index.html">
+          <h1 class="tm-site-title mb-0"> Admin Panel</h1>
+      </a>
+      <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-bars tm-nav-icon"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mx-auto h-100">
+              <li class="nav-item">
+                  <a class="nav-link active" href="{% url 'supuser' %}">
+                      <i class="fas fa-tachometer-alt"></i>
+                      Dashboard
+                      <span class="sr-only">(current)</span>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'productmanage' %}">
+                      <i class="fas fa-shopping-cart"></i>
+                      Products
+                  </a>
+              </li>
+
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'manage' %}">
+                      <i class="far fa-user"></i>
+                      Users
+                  </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'categorymanage' %}">
+                    <i class="far fa-user"></i>
+                    Category
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Variationmanage' %}">
+                    <i class="far fa-user"></i>
+                    Variation Manage
+                </a>
+              </li>
+              
+          </ul>
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link d-block" href="{% url 'signout' %}">
+                      Admin, <b>Logout</b>
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </div>
+
+</nav>
+<div class="container mt-5">
+  <div class="row tm-content-row">
+    <div class="col-12 tm-block-col">
+      <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+        <h2 class="tm-block-title">List of Accounts</h2>
+      </div>
+    </div>
+  </div>
+  <!-- row -->
+  <div class="row tm-content-row">
+    <div class="tm-block-col tm-col-account-settings w-75">
+        <div class="tm-bg-primary-dark tm-block tm-block-settings">
+            <h2 class="tm-block-title text-white">Users Details</h2>
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% if users %}
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">Last Login</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>{{user.first_name}}</td>
+                                    <td>{{user.last_name}}</td>
+                                    <td>{{user.email}}</td>
+                                    <td>{{user.phone_number}}</td>
+                                    <td>{{user.last_login}}</td>
+                                    <td>
+                                        {% if user.is_active %}
+                                        <form action="{% url 'block_user' user.id %}" method="post"
+                                            class="d-inline">{% csrf_token %}
+                                            <input type="submit" class="btn btn-danger btn-sm" value="Block"
+                                                onclick="return confirmUnBlockUser(event)">
+                                        </form>
+                                        {% else %}
+                                        <form action="{% url 'unblock_user' user.id %}" method="post"
+                                            class="d-inline">{% csrf_token %}
+                                            <input type="submit" class="btn btn-success btn-sm" value="Unblock"
+                                                onclick="return confirm('Are you sure? want to unblock')">
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <h3 class="text-center alert alert-warning">No Records Found</h3>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+ function confirmBlockUser(event) {
+        event.preventDefault(); // Prevent the link from immediately navigating
+        swal({
+          title: "Do you really want to Un-block the person ?",
+          icon: "warning",
+          buttons: {
+            cancel: "No",
+            confirm: "Yes"
+          },
+        }).then(function(confirmed){
+          if(confirmed){
+            window.location.href = event.target.getAttribute("href"); // Navigate to the block_pdt URL
+          }
+        
+        })
+       
+        
+        }
+      
+
+      function confirmUnBlockUser(event) {
+        event.preventDefault(); // Prevent the link from immediately navigating
+        swal({
+          title: "Do you really want to Block the person ?",
+          icon: "warning",
+          buttons: {
+            cancel: "No",
+            confirm: "Yes"
+          },
+        }).then(function(cofirmed){
+          if(cofirmed){
+            window.location.href = event.target.getAttribute("href"); // Navigate to the block_pdt URL
+          }
+        })
+     
+          // User clicked "OK" in the confirmation dialog
+         
+        }
+</script>
+{% endblock  %}

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+ {% load static %}
+
+{% block content %}
+
+<style>
+    .pro-qty {
+      outline: 1px solid #333;
+    }
+    
+    .qty-btn {
+        border: none;
+        background-color: transparent;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+    }
+    
+    .qty-input {
+        width: 4rem;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin: 0 0.5rem;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    
+    .qty-input:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+    
+    .qty-btn:active {
+        transform: translateY(2px);
+    }
+
+
+    @media (max-width: 768px) {
+        .cart-table {
+            overflow-x: auto;
+        }
+    
+        .cart-table table {
+            width: 100%;
+        }
+    
+        .cart-table th,
+        .cart-table td {
+            white-space: nowrap;
+        }
+    
+        .cart-table th.product-h,
+        .cart-table td.product-col {
+            width: auto;
+            max-width: 200px;
+        }
+    
+        .cart-table td.product-col {
+            display: flex;
+            align-items: center;
+        }
+    
+        .cart-table td.product-col img {
+            width: 50px;
+            margin-right: 10
+        }
+    }
+    
+</style>
+
+    <!-- Cart Page Section Begin -->
+    
+    <br><br>
+    <div class="row">
+        <aside class="col-lg-7  p-5">
+            <div class="card ">
+                <div class="card-header">
+                  Billing Address
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title mb-0">{{order.full_name}}</h5>
+                    <p class="card-text mb-0">{{order.full_address}}</p>
+                    <p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
+                    <p class="card-text mb-0">{{order.country}}</p>
+                    <p class="card-text mb-0">{{order.email}}</p>
+                    <p class="card-text mb-0">{{order.phone}}</p>
+                     {% if order.order_note  %}
+                        <b>Order Note:</b>{{order.order_note}}
+                     {% endif %}
+            </div>
+            <div class="card ">
+                <div class="form-check checkout__input__checkbox">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      Cash on Delivery
+                    </label>
+                </div>
+                <div class="form-check checkout__input__checkbox">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      PayPal
+                    </label>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"></p>
+                </div>
+                <div class="card ">
+                    <div class="card-header">
+                        Review Product
+                    </div>
+                    <div class="card">
+                        <div class="col-lg-12">
+                            <div class="order-table">
+                            {% for item in cart_items  %}
+                                <div class="cart-item">
+                                    <span>Product</span>
+                                    <a href=""><p></p></a>
+                                </div>
+                                <div class="cart-item">
+                                    <span>Price</span>
+                                    <p></p>
+                                </div>
+                                <div class="cart-item">
+                                    <span>Quantity</span>
+                                    <p></p>
+                                </div>
+                                <hr>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div> <!-- card.// -->
+        </aside> <!-- col.// -->
+        <aside class="col-lg-4 py-5">
+            <div class="card">
+                <div class="card-body ">
+                    {% for cart_item in cart_items  %}
+                    <dl class="dlist-align">
+                      <dt>Total price:₹ {{ cart_item.sub_total }}</dt>
+                      <dd class="text-right"></dd>
+                    </dl>
+                    <dl class="dlist-align">
+                      <dt>Shipping charge:₹ {{ shipping_charge }}</dt>
+                      <dd class="text-right"> </dd>
+                    </dl>
+                    <dl class="dlist-align">
+                      <dt>Total:₹ {{ grand_total }}</dt>
+                      <dd class="text-right text-dark b"><strong></strong></dd>
+                    </dl>
+                    {% endfor %}
+                    <dl class="dlist-align">
+                       <button class="btn btn-primary">Place Order</button>
+                    </dl>
+                    <hr>
+                    <div id="paypal-button-container"></div>
+                </div> <!-- card-body.// -->
+            </div> <!-- card.// -->
+        </aside> <!-- col.// -->
+    </div> <!-- row.// -->
+    
+    <!-- Cart Page Section End -->
+  
+
+{% endblock  %}
