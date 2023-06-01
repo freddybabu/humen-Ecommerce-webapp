@@ -4,7 +4,7 @@
 {% block content %}
 <nav class="navbar navbar-expand-xl">
   <div class="container h-100">
-      <a class="navbar-brand" href="index.html">
+      <a class="navbar-brand" href="#">
           <h1 class="tm-site-title mb-0"> Admin Panel</h1>
       </a>
       <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -61,6 +61,12 @@
                     Variation Manage
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'orderslist' %}">
+                    <i class="far fa-user"></i>
+                    Order Manage
+                </a>
+              </li>
               <!-- <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                       aria-haspopup="true" aria-expanded="false">
@@ -113,7 +119,7 @@
                       <td>
                           <form action="{% url 'del_category' cat.id %}" method="post">
                               {% csrf_token %}
-                              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure want to delete?')">Delete</button>
+                              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmDelete(event)">Delete</button>
                           </form>
                       </td>
                   </tr>
@@ -128,5 +134,25 @@
       </div>
   </div>
 </div>
+
+<script>
+    function confirmDelete(event) {
+        event.preventDefault(); // Prevent the form from immediately submitting
+        var form = event.target.closest('form'); // Find the closest form element
+    
+        swal({
+            title: "Do you really want to delete?",
+            icon: "warning",
+            buttons: {
+                cancel: "No",
+                confirm: "Yes"
+            },
+        }).then(function (confirmed) {
+            if (confirmed) {
+                form.submit(); // Submit the form
+            }
+        });
+    }
+</script>
   
 {% endblock  %}

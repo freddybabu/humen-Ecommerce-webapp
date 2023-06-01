@@ -20,4 +20,8 @@ urlpatterns = [
     path('Variationmanage/add',views.add_variation,name="add_variation"),
     path('Variationmanage/edit<int:id>',views.edit_variation,name="edit_variation"),
     path('Variationmange/delete<int:id>',views.delete_variation,name="delete_variation"),
+    
+    path('orderslist',views.orderslist,name="orderslist"),
+    path('orderslist/<int:order_id>/',views.order_details_admin,name="order_details_admin"),
+    path('change_status/<int:order_id>',views.change_status,name="change_status"),
 ]

@@ -14,7 +14,7 @@
 
 <nav class="navbar navbar-expand-xl">
   <div class="container h-100">
-      <a class="navbar-brand" href="index.html">
+      <a class="navbar-brand" href="#">
           <h1 class="tm-site-title mb-0"> Admin Panel</h1>
       </a>
       <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -71,6 +71,12 @@
                     Variation Manage
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'orderslist' %}">
+                    <i class="far fa-user"></i>
+                    Order Manage
+                </a>
+              </li>
               <!-- <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                       aria-haspopup="true" aria-expanded="false">
@@ -102,10 +108,10 @@
 <!-- <h1>Edit Product</h1> -->
     
 <div class="form-container">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" style="width: 500px;">
         {% csrf_token %}
-         {{ product_form.as_p }}
-         <button type="submit" class="btn btn-primary btn-lg custom-button">Save changes</button>
+        {{ product_form.as_p }}
+        <button type="submit">Save changes</button>
     </form>
 </div>
   

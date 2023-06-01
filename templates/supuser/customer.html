@@ -4,7 +4,7 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
 <nav class="navbar navbar-expand-xl">
   <div class="container h-100">
-      <a class="navbar-brand" href="index.html">
+      <a class="navbar-brand" href="#">
           <h1 class="tm-site-title mb-0"> Admin Panel</h1>
       </a>
       <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -46,6 +46,12 @@
                     Variation Manage
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'orderslist' %}">
+                    <i class="far fa-user"></i>
+                    Order Manage
+                </a>
+              </li>
               
           </ul>
           <ul class="navbar-nav">
@@ -69,7 +75,7 @@
   </div>
   <!-- row -->
   <div class="row tm-content-row">
-    <div class="tm-block-col tm-col-account-settings w-75">
+    <div class="tm-block-col tm-col-account-settings w-100">
         <div class="tm-bg-primary-dark tm-block tm-block-settings">
             <h2 class="tm-block-title text-white">Users Details</h2>
             <div class="container mt-5">
@@ -100,13 +106,13 @@
                                         <form action="{% url 'block_user' user.id %}" method="post"
                                             class="d-inline">{% csrf_token %}
                                             <input type="submit" class="btn btn-danger btn-sm" value="Block"
-                                                onclick="return confirmUnBlockUser(event)">
+                                                onclick="return confirmBlockUser(event)">
                                         </form>
                                         {% else %}
                                         <form action="{% url 'unblock_user' user.id %}" method="post"
                                             class="d-inline">{% csrf_token %}
-                                            <input type="submit" class="btn btn-success btn-sm" value="Unblock"
-                                                onclick="return confirm('Are you sure? want to unblock')">
+                                            <input type="submit"  class="btn btn-success btn-sm" value="Unblock"
+                                                onclick="return confirmUnBlockUser(event)">
                                         </form>
                                         {% endif %}
                                     </td>
@@ -125,43 +131,42 @@
 </div>
 
 <script>
- function confirmBlockUser(event) {
-        event.preventDefault(); // Prevent the link from immediately navigating
-        swal({
-          title: "Do you really want to Un-block the person ?",
+  function confirmBlockUser(event) {
+      event.preventDefault(); // Prevent the form from immediately submitting
+      var form = event.target.closest('form'); // Find the closest form element
+  
+      swal({
+          title: "Do you really want to block the person?",
           icon: "warning",
           buttons: {
-            cancel: "No",
-            confirm: "Yes"
+              cancel: "No",
+              confirm: "Yes"
           },
-        }).then(function(confirmed){
-          if(confirmed){
-            window.location.href = event.target.getAttribute("href"); // Navigate to the block_pdt URL
+      }).then(function (confirmed) {
+          if (confirmed) {
+              form.submit(); // Submit the form
           }
-        
-        })
-       
-        
-        }
-      
-
-      function confirmUnBlockUser(event) {
-        event.preventDefault(); // Prevent the link from immediately navigating
-        swal({
-          title: "Do you really want to Block the person ?",
+      });
+  }
+  
+  function confirmUnBlockUser(event) {
+      event.preventDefault(); // Prevent the form from immediately submitting
+      var form = event.target.closest('form'); // Find the closest form element
+  
+      swal({
+          title: "Do you really want to unblock the person?",
           icon: "warning",
           buttons: {
-            cancel: "No",
-            confirm: "Yes"
+              cancel: "No",
+              confirm: "Yes"
           },
-        }).then(function(cofirmed){
-          if(cofirmed){
-            window.location.href = event.target.getAttribute("href"); // Navigate to the block_pdt URL
+      }).then(function (confirmed) {
+          if (confirmed) {
+              form.submit(); // Submit the form
           }
-        })
-     
-          // User clicked "OK" in the confirmation dialog
-         
-        }
-</script>
+      });
+  }
+  </script>
+  
+  
 {% endblock  %}

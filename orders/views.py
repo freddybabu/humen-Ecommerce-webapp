@@ -1,8 +1,9 @@
+import datetime
 from django.shortcuts import render,redirect
 from carts.models import CartItem
 from .forms import OrderForm
-from .models import Order
-import datetime
+from .models import Order,OrderProduct
+
 
 # Create your views here.
 
@@ -70,7 +71,30 @@ def place_order(request, total=0,quantity=0):
     
     return redirect('checkout')
     
+ 
+def order_complete(request):
+    order_number = request.GET.get('order_number')
+    # transation_ID = request.GET.get()  
     
+    try:
+        order = Order.objects.get(order_number=order_number,is_ordered=True)
+        ordered_product = OrderProduct.objects.filter(order_id=order.id)
+
+        sub_total =0
+        for item in ordered_product:
+            sub_total = item.product_price*item.quantity
+            
+        context = {
+            'order':order,
+            'ordered_product':ordered_product,
+            'sub_total':sub_total
+        }
+        return render(request, 'orders/order_complete.html', context)
+
+    except Order.DoesNotExist:
+       return redirect('home')
+
+
 
     
             

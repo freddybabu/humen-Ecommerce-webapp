@@ -12,5 +12,8 @@ urlpatterns = [
     path('resetpassword_validate/<uidb64>/<token>/',views.resetpassword_validate,name='resetpassword-validate'),
     path('resetpassword',views.resetpassword,name='resetpassword'),
     
+    path('user_otp_sign_in',views.user_otp_sign_in,name='user_otp_sign_in'),
+    path('user_otp_sign_in_validation',views.user_otp_sign_in_validation,name='user_otp_sign_in_validation'),
+    
     path('my_orders/',views.my_orders,name='my_orders'),
 ]

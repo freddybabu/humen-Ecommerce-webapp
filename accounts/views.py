@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 import random
 from django.contrib import messages, auth
+from django.http import JsonResponse
 from .import verify
 from orders.models import Order
 from django.contrib.auth import authenticate, login,logout
@@ -20,7 +21,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 import requests
 
-# from twilio.rest import Client
+from twilio.rest import Client
 
 
 
@@ -59,6 +60,7 @@ def register(request):
     # }
     # return render(request, 'accounts/register.html', context)
 
+#########################################################################################################
 
 def verify_code(request):
     if request.method == 'POST':
@@ -75,6 +77,8 @@ def verify_code(request):
         form = VerifyForm()
     return render(request, 'accounts/verify.html', {'form':form})
 
+##########################################################################################################
+
 @login_required(login_url='signin')
 def dashboard(request):
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id,is_ordered=True)
@@ -83,7 +87,8 @@ def dashboard(request):
         'orders_count':orders_count
     }
     return render(request, 'accounts/dashboard.html',context)
-    
+ 
+#############################################################################################################   
 
 
 def signin(request):
@@ -111,7 +116,7 @@ def signin(request):
                             product_variation.append(list(variation))
                             
                         # Get the cart items from the user to access his product variation
-                        cart_item = CartItem.objects.filter(user=current_user)
+                        cart_item = CartItem.objects.filter(user=myuser)
                         ex_var_list = []
                         id = []
                         for item in cart_item:
@@ -125,12 +130,12 @@ def signin(request):
                                 item_id = id[index]
                                 item = CartItem.objects.get(id=item_id)
                                 item.quantity += 1
-                                item.user = user
+                                item.user = myuser
                                 item.save()  
                             else:
                                 cart_item = CartItem.objects.filter(cart=cart) 
                                 for item in cart_item:
-                                    item.user = user
+                                    item.user = myuser
                                     item.save()
                 except:
                      pass
@@ -143,6 +148,8 @@ def signin(request):
             return redirect('signin')
     else:
         return render(request, 'accounts/signin.html')
+    
+################################################################################################################
 
 @login_required(login_url='signin')
 def signout(request):   
@@ -152,6 +159,7 @@ def signout(request):
     messages.success(request, 'You are logged out.')
     return redirect('signin')
 
+#############################################################################################################
 
 def forgotpassword(request):
     
@@ -163,7 +171,7 @@ def forgotpassword(request):
             #reset password email
             current_site = get_current_site(request)
             mail_subject = 'humen: Reset your password'
-            message = render_to_string('accounts/reset_password_email.html',{
+            message = render_to_string('accounts/reset_account_password .html',{
                 'user':user,
                 'domain':current_site,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
@@ -181,6 +189,8 @@ def forgotpassword(request):
             return redirect('forgotpassword')
     return render(request, 'accounts/forgotpassword.html')
 
+##########################################################################################################
+
 def resetpassword_validate(request,uidb64,token):
     try:
         uid=urlsafe_base64_decode(uidb64).decode()
@@ -195,7 +205,7 @@ def resetpassword_validate(request,uidb64,token):
     else:
         messages.error(request,'Sorry the activation link is has expired')
         return redirect('signin')
-    
+################################################################################################################   
     
 def resetpassword(request):
     if request.method == 'POST':
@@ -215,12 +225,85 @@ def resetpassword(request):
     else:
         return render(request,'accounts/resetpassword.html')
     
+##############################################################################################################   
+    
+    
+def user_otp_sign_in(request):
+    '''handle the user otp sign in'''
+    print("user otp ethii")
+    otp_sign_in_user_status = ''
+    if request.method == 'POST':
+        print('helloooo')
+        phone_number = request.POST.get('phone_number')
+        request.session['phone_number'] = phone_number
+        print(phone_number)
+
+        if Account.objects.filter(phone_number=phone_number).exists():
+            print('heloooo')
+
+            user = Account.objects.get(phone_number=phone_number).email
+            client = Client('AC529b57fdcebcfa5db3696c73959779e4',
+                                 'edf5a5b7ec653195e7bea98a65a4c094')
+            verification = client.verify \
+                .v2 \
+                .services('VA17d6c4e0348d4667123fc544b0830c25') \
+                .verifications \
+                .create(to='+91{}'.format(phone_number), channel='sms')
+            request.session['username'] = user
+            user_authentication_status = 'success'
+            otp_sign_in_user_status = 'success'
+            return JsonResponse({'otp_sign_in_user_status': otp_sign_in_user_status})
+        else:
+            return render(request, 'accounts/user_otp_sign_in.html', {'message': "invalid phone number"})
+    else:
+        return render(request, 'accounts/user_otp_sign_in.html')
+    
+##############################################################################################################
+def user_otp_sign_in_validation(request):
+    '''handle the user otp validation'''
+    if request.method == 'POST':
+        otp_1 = request.POST.get('otp_1')
+        otp_2 = request.POST.get('otp_2')
+        otp_3 = request.POST.get('otp_3')
+        otp_4 = request.POST.get('otp_4')
+        # var err = document.getElementById('err')
+
+        user_otp = str(otp_1 + otp_2 + otp_3 + otp_4)
+        print(otp)
+        print(user_otp)
+        phone_number = request.session['phone_number']
+        client = Client('AC529b57fdcebcfa5db3696c73959779e4',
+                        'edf5a5b7ec653195e7bea98a65a4c094')
+        verification_check = client.verify \
+            .v2 \
+            .services('VA17d6c4e0348d4667123fc544b0830c25') \
+            .verification_checks \
+            .create(to='+91{}'.format(phone_number), code=user_otp)
+
+        print(verification_check.status)
+        user_authentication_status = 'approved'
+        # user_authentication_status = 'wrong_otp'
+        # if str(user_otp) == str(otp):
+        #     user_authentication_status = 'otp_verified'
+        #     user = Users.objects.get(contact_number = str(request.session['contact_number']))
+        #     request.session['user'] = user.email
+        return JsonResponse({'user_authentication_status': user_authentication_status})
+    return render(request, 'user_otp_sign_in_validation.html')    
+ 
+###############################################################################################################
+ 
+ 
+
+    
+ 
     
 @login_required(login_url='signin')
 def my_orders(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
     
-    context = {
+    context ={
         'orders':orders,
     }
     return render(request, 'accounts/my_orders.html',context)
+
+#############################################################################################################
