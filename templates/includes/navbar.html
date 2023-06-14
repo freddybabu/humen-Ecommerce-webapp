@@ -127,7 +127,7 @@
                                 {% endfor %}
                             </ul>
                         </li> -->
-                        <li><a href="#">Wishlist</a></li>
+                        <li><a class="{% if 'wishlist' in request.path %}active{% endif %}" href="{% url 'wishlist' %}">Wishlist</a></li>
                         <li><a href="{% url 'cart' %}">Cart</a></li>
                         <li><a href="{% url 'my_orders' %}">Orders</a></li>
                     </ul>

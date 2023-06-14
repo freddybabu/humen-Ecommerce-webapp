@@ -29,7 +29,7 @@
     <div id="preloder">
         <div class="loader"></div>
     </div>
-    
+    {% include "includes/alerts.html" %}
     <!-- Search model -->
 	<div class="search-model">
 		<div class="h-100 d-flex align-items-center justify-content-center">
@@ -219,12 +219,18 @@
                 <div class="col-lg-4 col-sm-6 mix all dresses bags">
                     <div class="single-product-item">
                         <figure>
-                            <a href="{{ product.get_url }}"><img src="{{product.images.url}}" alt=""></a>
-                            <div class="p-status">new</div>
+                            <a href="{{ product.get_url }}"><img src="{{product.images.url}}" alt="image"></a>
+                            <div class="p-status">new
+                                {% if item.product.id in wishlist_items_ids %}
+                                <a href="{% url 'add_to_wishlist' product_id=product.id %}" style="color:white;"><i class="fa-sharp fa-solid fa-heart fa-flip fa-xl"></i></a>
+                                {% else %}
+                                <a href="{% url 'add_to_wishlist' product_id=product.id %}" style="color: red;"><i class="fa-sharp fa-solid fa-heart fa-flip fa-xl"></i></a>
+                                {% endif %}
+                            </div>
                         </figure>
                         <div class="product-text">
                             <a href="{{ product.get_url }}" class="title text-dark">{{product.product_name}}</a>
-                            <p>Rs. {{product.price}}</p>
+                            <p>$ {{product.price}}</p>
                         </div>
                     </div>
                 </div>
@@ -303,7 +309,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
-     
+
     
 </body>
 

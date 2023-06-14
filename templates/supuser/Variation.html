@@ -5,25 +5,23 @@
 
 <nav class="navbar navbar-expand-xl">
     <div class="container h-100">
-        <a class="navbar-brand" href="#">
             <h1 class="tm-site-title mb-0"> Admin Panel</h1>
-        </a>
         <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars tm-nav-icon"></i>
         </button>
-  
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mx-auto h-100">
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'supuser' %}">
-                        <i class="fas fa-tachometer-alt"></i>
+                        <i class="fa fa-folder-o" aria-hidden="true"></i>
                         Dashboard
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <!-- <li class="nav-item dropdown">
-  
+
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <i class="far fa-file-alt"></i>
@@ -38,35 +36,39 @@
                     </div>
                 </li> -->
                 <li class="nav-item">
+                  <a class="nav-link" href="{% url 'manage' %}">
+                     <i class="fa fa-user-plus" aria-hidden="true"></i>
+                      Users
+                  </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'productmanage' %}">
                         <i class="fas fa-shopping-cart"></i>
                         Products
                     </a>
                 </li>
-  
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'manage' %}">
-                        <i class="far fa-user"></i>
-                        Users
-                    </a>
-                </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'categorymanage' %}">
-                      <i class="far fa-user"></i>
+                      <i class="fa fa-asterisk" aria-hidden="true"></i>
                       Category
                   </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'Variationmanage' %}">
-                        <i class="far fa-user"></i>
+                        <i class="fa fa-heartbeat" aria-hidden="true"></i>
                         Variation Manage
                     </a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'orderslist' %}">
-                        <i class="far fa-user"></i>
+                        <i class="fa fa-tags" aria-hidden="true"></i>
                         Order Manage
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'coupen_manage' %}">
+                        <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                        Coupons
                     </a>
                 </li>
                 <!-- <li class="nav-item dropdown">
@@ -87,14 +89,14 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link d-block" href="{% url 'signout' %}">
-                        Admin, <b>Logout</b>
+                        Admin, <b>Logout  <i class="fa fa-sign-out" aria-hidden="true"></i></b>
                     </a>
                 </li>
             </ul>
         </div>
     </div>
-  
-  </nav>
+
+</nav>
 
   <div class="container">
     <h2>Variation Details</h2>
@@ -107,7 +109,7 @@
           <th>Value</th>
           <th>Active</th>
           <th>Created</th>
-          <th><a href = "{% url 'add_variation' %}" class ="btn btn-primary btn-sm">Add Product</a></th>
+          <th><a href = "{% url 'add_variation' %}" class ="btn btn-primary btn-sm" style="border-radius: 10rem;">Add Product</a></th>
         </tr>
       </thead>
       <tbody>
@@ -119,9 +121,9 @@
           <td>{{ variation.is_active }}</td>
           <td>{{ variation.created_date }}</td>
           <td>
-              <a href = "{% url 'edit_variation'  variation.id %}" class ="btn btn-warning btn-sm my-2 ">Edit</a>
+              <a href = "{% url 'edit_variation'  variation.id %}" class ="btn btn-warning btn-sm my-2 " style="border-radius: 10rem;">Edit</a>
               <form action="{% url 'delete_variation' variation.id %}" method="post" class="d-inline">{% csrf_token %}
-                  <input type="submit" class="btn btn-danger btn-sm" value="Delete" onclick="return confirm('Are you sure you want to delete?')">
+                  <input type="submit" class="btn btn-danger btn-sm" style="border-radius: 10rem;" value="Delete" onclick="return confirm('Are you sure you want to delete?')">
               </form>
           </td>
         </tr>

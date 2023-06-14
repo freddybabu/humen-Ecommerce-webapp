@@ -141,10 +141,19 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+#smtp configuration
+EMAIL_HOST = 'smtp.gmail.com'
+EMIAL_PORT = 587
+EMAIL_HOST_USER = 'freddybabually619@gmail.com'
+EMAIL_HOST_PASSWORD = 'gkycbsmwtdovofks'
+EMAIL_USE_TLS = True
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
 
 
 MESSAGE_TAGS = {

@@ -3,28 +3,31 @@ import random
 from django.contrib import messages, auth
 from django.http import JsonResponse
 from .import verify
-from orders.models import Order
+from orders.models import Order,OrderProduct
 from django.contrib.auth import authenticate, login,logout
 from django.shortcuts import render, redirect
 from django.conf import settings
-from .forms import RegistrationForm,UserForm,VerifyForm
+from .forms import RegistrationForm,UserForm,VerifyForm,AddressBookForm,UserProfileForm
 from carts.models import Cart,CartItem
-from .models import Account
+from store.models import Wishlist,Product
+from .models import Account,AddressBook
 from django.contrib.auth.decorators import login_required
 from carts.views import _cart_id
-
+from django.views.decorators.cache import never_cache
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from django.core.exceptions import ObjectDoesNotExist
 import requests
 
 from twilio.rest import Client
+from accounts.verify import send,check
 
 
-
+@never_cache
 def register(request):
     form = RegistrationForm()
     if request.method == 'POST':
@@ -51,15 +54,6 @@ def register(request):
     }
     return render(request,'accounts/register.html',context)
 
-            # return redirect('signin')
-    # else:
-    #     form = RegistrationForm()
-
-    # context = {
-    #     'form': form,
-    # }
-    # return render(request, 'accounts/register.html', context)
-
 #########################################################################################################
 
 def verify_code(request):
@@ -84,13 +78,11 @@ def dashboard(request):
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id,is_ordered=True)
     orders_count = orders.count()
     context = {
-        'orders_count':orders_count
+        'orders_count':orders_count,
     }
     return render(request, 'accounts/dashboard.html',context)
  
 #############################################################################################################   
-
-
 def signin(request):
     if request.method == "POST":
         email = request.POST['email']
@@ -161,6 +153,7 @@ def signout(request):
 
 #############################################################################################################
 
+@login_required(login_url='signin')
 def forgotpassword(request):
     
     if request.method == 'POST':
@@ -178,19 +171,18 @@ def forgotpassword(request):
                 'token':default_token_generator.make_token(user),
             })
             to_email = email
-            print(email)
+            print(to_email)
             send_email = EmailMessage(mail_subject,message,to=[to_email])
             send_email.send()
             messages.success(request,'Password reset email has been send to your email address')
             return redirect('signin')
-        
         else:
             messages.error(request,'Account does not exist!!')
             return redirect('forgotpassword')
     return render(request, 'accounts/forgotpassword.html')
 
 ##########################################################################################################
-
+@login_required(login_url='signin')
 def resetpassword_validate(request,uidb64,token):
     try:
         uid=urlsafe_base64_decode(uidb64).decode()
@@ -206,7 +198,7 @@ def resetpassword_validate(request,uidb64,token):
         messages.error(request,'Sorry the activation link is has expired')
         return redirect('signin')
 ################################################################################################################   
-    
+@login_required(login_url='signin')    
 def resetpassword(request):
     if request.method == 'POST':
         password = request.POST['password']
@@ -221,81 +213,50 @@ def resetpassword(request):
         else:
             messages.error(request,"Password are not match")
             return redirect('resetpassword')
-        
     else:
         return render(request,'accounts/resetpassword.html')
     
 ##############################################################################################################   
     
-    
 def user_otp_sign_in(request):
     '''handle the user otp sign in'''
-    print("user otp ethii")
-    otp_sign_in_user_status = ''
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == 'POST':
-        print('helloooo')
-        phone_number = request.POST.get('phone_number')
-        request.session['phone_number'] = phone_number
-        print(phone_number)
-
-        if Account.objects.filter(phone_number=phone_number).exists():
-            print('heloooo')
-
-            user = Account.objects.get(phone_number=phone_number).email
-            client = Client('AC529b57fdcebcfa5db3696c73959779e4',
-                                 'edf5a5b7ec653195e7bea98a65a4c094')
-            verification = client.verify \
-                .v2 \
-                .services('VA17d6c4e0348d4667123fc544b0830c25') \
-                .verifications \
-                .create(to='+91{}'.format(phone_number), channel='sms')
-            request.session['username'] = user
-            user_authentication_status = 'success'
-            otp_sign_in_user_status = 'success'
-            return JsonResponse({'otp_sign_in_user_status': otp_sign_in_user_status})
+        phone_number = request.POST['phone_number']
+        if Account.objects.all().filter(phone_number=phone_number):
+            # phone_number_with_country_code='+91'+phone_number
+            send(phone_number)
+            return redirect(user_otp_sign_in_validation,phone_number)
         else:
-            return render(request, 'accounts/user_otp_sign_in.html', {'message': "invalid phone number"})
-    else:
-        return render(request, 'accounts/user_otp_sign_in.html')
-    
-##############################################################################################################
-def user_otp_sign_in_validation(request):
-    '''handle the user otp validation'''
-    if request.method == 'POST':
-        otp_1 = request.POST.get('otp_1')
-        otp_2 = request.POST.get('otp_2')
-        otp_3 = request.POST.get('otp_3')
-        otp_4 = request.POST.get('otp_4')
-        # var err = document.getElementById('err')
+            messages.error(request, 'Phone number is not registered with us')
+    return render(request,'accounts/login_otp.html')
 
-        user_otp = str(otp_1 + otp_2 + otp_3 + otp_4)
-        print(otp)
-        print(user_otp)
-        phone_number = request.session['phone_number']
-        client = Client('AC529b57fdcebcfa5db3696c73959779e4',
-                        'edf5a5b7ec653195e7bea98a65a4c094')
-        verification_check = client.verify \
-            .v2 \
-            .services('VA17d6c4e0348d4667123fc544b0830c25') \
-            .verification_checks \
-            .create(to='+91{}'.format(phone_number), code=user_otp)
-
-        print(verification_check.status)
-        user_authentication_status = 'approved'
-        # user_authentication_status = 'wrong_otp'
-        # if str(user_otp) == str(otp):
-        #     user_authentication_status = 'otp_verified'
-        #     user = Users.objects.get(contact_number = str(request.session['contact_number']))
-        #     request.session['user'] = user.email
-        return JsonResponse({'user_authentication_status': user_authentication_status})
-    return render(request, 'user_otp_sign_in_validation.html')    
- 
 ###############################################################################################################
- 
- 
 
-    
- 
+def user_otp_sign_in_validation(request, phone_number):
+    '''handle the user otp validation'''
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        otp_code = request.POST['otp']
+        # phone_number_with_country_code = '+91' + phone_number
+        try:
+            user = Account.objects.get(phone_number=phone_number)
+        except ObjectDoesNotExist:
+            messages.error(request, 'User does not exist')
+            return redirect('home')
+        except Account.MultipleObjectsReturned:
+            messages.error(request, 'Multiple accounts with the same phone number')
+            return redirect('home')
+
+        if check(phone_number, otp_code):
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Incorrect OTP')    
+    return render(request, 'accounts/login_otp_verify.html')    
+###############################################################################################################
     
 @login_required(login_url='signin')
 def my_orders(request):
@@ -307,3 +268,131 @@ def my_orders(request):
     return render(request, 'accounts/my_orders.html',context)
 
 #############################################################################################################
+
+def whishlist(request):
+    wishlist_items = Wishlist.objects.filter(user=request.user)
+    context = {
+        'wishlist_items':wishlist_items
+    }
+    return render(request,'store/wishlist.html',context)
+##############################################################################################################
+
+@login_required(login_url='signin')
+def order_details(request,order_id):
+    try:
+        order_product = OrderProduct.objects.filter(order__order_number=order_id)
+        order = Order.objects.get(order_number=order_id)
+        sub_total = 0
+        shipping_charge=40
+        grand_total = 0
+        for i in order_product:
+            sub_total += i.product_price * i.quantity
+        
+        grand_total = sub_total+shipping_charge
+        context = {
+            'order_product':order_product,
+            'order':order,
+            'sub_total':sub_total,
+            'shipping_charge':shipping_charge,
+            'grand_total':grand_total,
+            
+        }
+        
+    except Order.DoesNotExist:
+        
+        context ={
+            'error_message':'Order does not exist'
+        }
+        
+    return render(request,'accounts/order_details.html',context)
+
+################################################################################################################
+
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    
+    if order.status == 'Cancelled':
+        messages.warning(request, 'This order has already been cancelled.')
+    else:
+        # Iterate over the order items
+        for order_product in order.orderproduct_set.all():
+            # Increase the stock quantity of each product
+            product = order_product.product
+            product.stock += order_product.quantity
+            product.save()
+        
+        order.status = 'Cancelled'
+        order.save()
+        messages.success(request, 'Order successfully cancelled.')
+        
+    return redirect('my_orders')
+    
+#################################################################################################################
+@login_required(login_url='signin')
+def add_to_wishlist(request,product_id):
+    myproduct = get_object_or_404(Product, id=product_id)
+    created = Wishlist.objects.get_or_create(user=request.user,product=myproduct)
+    if created:
+        messages.success(request,'Product added to wishlist')
+    else:
+        messages.info(request,'Product already in wishlist.')
+    return redirect('wishlist')
+
+###############################################################################################################
+@login_required(login_url='signin')
+def remove_from_wishlist(request,product_id):
+    myproduct = get_object_or_404(Product,id=product_id)
+    Wishlist.objects.filter(user=request.user,product=myproduct).delete()
+    messages.success(request,'Product removed from wishlist.')
+    return redirect('wishlist')
+    
+################################################################################################################
+def my_addresses(request):
+    addresses =  AddressBook.objects.filter(user=request.user).order_by('-id')
+    context = {
+        'addresses':addresses
+    }  
+    return render(request,'accounts/my_addresses.html',context)
+
+###############################################################################################################
+@login_required(login_url='signin')
+def add_addresses(request):
+    form = AddressBookForm()
+    if request.method == "POST":
+        form = AddressBookForm(request.POST)
+        if form.is_valid(): 
+            saveform=form.save(commit=False)
+            saveform.user = request.user
+            saveform.save()
+            messages.success(request,"New address added successfully")
+            return redirect('my_addresses')
+    context ={
+        'form':form
+    }
+    return render(request,'accounts/add_address.html',context)
+##################################################################################################################
+
+def activate_address(request):
+    a_id = request.GET['id']
+    AddressBook.objects.update(status=False)
+    AddressBook.objects.filter(id=a_id).update(status=True)
+    
+    return JsonResponse({'bool':True})   
+    
+##############################################################################################################
+@login_required(login_url='signin')
+def edit_profile(request):
+    user_form = UserForm(instance=request.user)
+    
+    if request.method == 'POST':
+        user_form = UserForm(request.POST,instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request,"Profile updated successfully")
+            return redirect('edit_profile')
+        
+    context = {
+        'user_form':user_form,
+    }
+    return render(request, 'accounts/edit_profile.html',context)
+      

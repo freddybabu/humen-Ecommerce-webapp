@@ -1,5 +1,6 @@
+import re
 from django import forms
-from .models import Account
+from .models import Account,AddressBook,UserProfile 
 
 
 class RegistrationForm(forms.ModelForm):
@@ -32,7 +33,22 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError(
                 "password does not match!"
             )
-    
+        
+        #password strength validation
+        if password:
+            # Ensure the password meets the required criteria
+            if len(password) < 8:
+                raise forms.ValidationError("Password must be at least 8 characters long.")
+            if not re.search(r'\d', password):
+                raise forms.ValidationError("Password must contain at least one digit.")
+            if not re.search(r'[A-Z]', password):
+                raise forms.ValidationError("Password must contain at least one uppercase letter.")
+            if not re.search(r'[a-z]', password):
+                raise forms.ValidationError("Password must contain at least one lowercase letter.")
+            if not re.search(r'[!@#$%^&*()-=_+]', password):
+                raise forms.ValidationError("Password must contain at least one special character (!@#$%^&*()-=_+).")
+
+        return clean_data
         
 class VerifyForm(forms.Form):
     code = forms.CharField(
@@ -51,3 +67,26 @@ class UserForm(forms.ModelForm):
             "last_name":forms.TextInput(attrs={"class":"form-control"}),
             "phone_number":forms.TextInput(attrs={"class":"form-control", 'placeholder':'9744733924'}),
         }
+        
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ("address_line_1","address_line_2","city","state","country","profile_picture")
+        
+class AddressBookForm(forms.ModelForm):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2', 'placeholder':'First Name'}))
+    last_name  = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'Last Name'}))
+    phone      = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'Phone Number'}))
+    email      = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'E-mail'}))
+    address_line_1 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'House name & Locality'}))
+    address_line_2 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'Address line 2(optional)'}))
+    city         = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'City'}))
+    state        = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'State'}))
+    country      = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'Country'}))
+    pincode      = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2','placeholder':'Pincode'}))
+    status       = forms.BooleanField(required=False,widget=forms.CheckboxInput())
+    
+    class Meta:
+        model = AddressBook
+        fields = ['first_name','last_name','phone','email','address_line_1','address_line_2','city','state','country','pincode','status']
+        exclude = ("user",)

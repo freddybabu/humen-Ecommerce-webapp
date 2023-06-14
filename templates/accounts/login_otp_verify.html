@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<main class="main">
+    <section class="pt-150 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 m-auto">
+                    <div class="row">
+                        {% include 'includes/alerts.html' %}   
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                <div class="padding_eight_all bg-white">
+                                    
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30">OTP Verification</h3>
+                                    </div>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input type="text" required="" name="otp" placeholder="Enter the OTP">
+                                        </div>
+                                        
+                                        <div class="login_footer form-group">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Verify OTP</button>
+                                            </div>
+                        
+                                        </div>
+                                        
+                                    </form>
+                                    {% comment %} <div class='form-group d-flex justify-content-between'>
+                                        <div class="d-flex">
+                                            <p  class="text-center mt-4">Don't have an account? <a href="{% url 'register' %}"  style="color: #ffa45c;" class="text-decoration-none">Create new</a></p>
+                                        </div>
+                                    </div> {% endcomment %}
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+  
+{% endblock  %}

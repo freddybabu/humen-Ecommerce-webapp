@@ -17,7 +17,7 @@
           <ul class="navbar-nav mx-auto h-100">
               <li class="nav-item">
                   <a class="nav-link active" href="{% url 'supuser' %}">
-                      <i class="fas fa-tachometer-alt"></i>
+                     <i class="fa fa-folder-o" aria-hidden="true"></i>
                       Dashboard
                       <span class="sr-only">(current)</span>
                   </a>
@@ -38,33 +38,33 @@
                   </div>
               </li> -->
               <li class="nav-item">
+                <a class="nav-link" href="{% url 'manage' %}">
+                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                    Users
+                </a>
+             </li>
+              <li class="nav-item">
                   <a class="nav-link" href="{% url 'productmanage' %}">
-                      <i class="fas fa-shopping-cart"></i>
+                    <i class="fas fa-shopping-cart"></i>
                       Products
                   </a>
               </li>
 
               <li class="nav-item">
-                  <a class="nav-link" href="{% url 'manage' %}">
-                      <i class="far fa-user"></i>
-                      Users
-                  </a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="{% url 'categorymanage' %}">
-                    <i class="far fa-user"></i>
+                    <i class="fa fa-asterisk" aria-hidden="true"></i>
                     Category
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'Variationmanage' %}">
-                    <i class="far fa-user"></i>
+                    <i class="fa fa-heartbeat" aria-hidden="true"></i>
                     Variation Manage
                 </a>
              </li>
              <li class="nav-item">
                 <a class="nav-link" href="{% url 'orderslist' %}">
-                    <i class="far fa-user"></i>
+                    <i class="fa fa-tags" aria-hidden="true"></i>
                     Order Manage
                 </a>
             </li>

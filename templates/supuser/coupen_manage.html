@@ -1,0 +1,149 @@
+{% extends "supuser/supbase.html" %}
+ {% load static %}
+{% block content %}
+
+<style>
+    .thead-custom {
+        background-color: #f5a623; /* Replace with your desired color */
+        color: #fff;
+    }
+</style>
+<nav class="navbar navbar-expand-xl">
+    <div class="container h-100">
+            <h1 class="tm-site-title mb-0"> Admin Panel</h1>
+        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars tm-nav-icon"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto h-100">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'supuser' %}">
+                        <i class="fa fa-folder-o" aria-hidden="true"></i>
+                        Dashboard
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <!-- <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="far fa-file-alt"></i>
+                        <span>
+                            Reports <i class="fas fa-angle-down"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Daily Report</a>
+                        <a class="dropdown-item" href="#">Weekly Report</a>
+                        <a class="dropdown-item" href="#">Yearly Report</a>
+                    </div>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'manage' %}">
+                     <i class="fa fa-user-plus" aria-hidden="true"></i>
+                      Users
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'productmanage' %}">
+                        <i class="fas fa-shopping-cart"></i>
+                        Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'categorymanage' %}">
+                      <i class="fa fa-asterisk" aria-hidden="true"></i>
+                      Category
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Variationmanage' %}">
+                        <i class="fa fa-heartbeat" aria-hidden="true"></i>
+                        Variation Manage
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'orderslist' %}">
+                        <i class="fa fa-tags" aria-hidden="true"></i>
+                        Order Manage
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'coupen_manage' %}">
+                        <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                        Coupons
+                    </a>
+                </li>
+                <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                        <span>
+                            Settings <i class="fas fa-angle-down"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="#">Billing</a>
+                        <a class="dropdown-item" href="#">Customize</a>
+                    </div>
+                </li> -->
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link d-block" href="{% url 'signout' %}">
+                        Admin, <b>Logout  <i class="fa fa-sign-out" aria-hidden="true"></i></b>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</nav>
+<br>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="text-white">Coupon List</h1>
+        <a href="{% url 'add_coupens' %}" class="btn btn-dark pb-2" style="border-radius: 10rem;">Add Coupon</a>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-custom">
+            <tr>
+                <th>Code</th>
+                <th>Discount</th>
+                <th>Minimum Amount</th>
+                <th>Active</th>
+                <th>Active Date</th>
+                <th>Expiry Date</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for coupon in coupens %}
+            <tr>
+                <td>{{ coupon.code }}</td>
+                <td>{{ coupon.discount }}</td>
+                <td>{{ coupon.min_amount }}</td>
+                <td>{{ coupon.active }}</td>
+                <td>{{ coupon.active_date }}</td>
+                <td>{{ coupon.expiry_date }}</td>
+                <td>{{ coupon.created_at }}</td>
+                <td>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'edit_coupens' coupon.id %}" class="btn btn-sm btn-primary" style="border-radius: 10rem;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <form action="{% url 'del_coupens' coupon.id %}" method="post" class="d-inline">{% csrf_token %}
+                            <input type="submit" class="btn btn-danger btn-sm" style="border-radius: 10rem; margin-left:5px" onclick="return confirm('Are you sure you want to Delete this Coupon?')" value="Delete">
+                        </form>
+                    </div>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+  
+{% endblock  %}

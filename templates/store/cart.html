@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load static %}
+{% load static %}
 
 {% block content %}
 
@@ -159,7 +159,7 @@
                                     </p>
                                 </div>
                             </td>
-                            <td class="price-col">Rs.{{ cart_item.product.price }}</td>
+                            <td class="price-col">$.{{ cart_item.product.price }}</td>
                             <!-- <td>Color : Blue <br> size : L</td> -->
                             <td class="quantity-col">
                                 <div class="col" style="width: 12rem;border:1px solid black;">
@@ -174,14 +174,14 @@
                                            {% for item in cart_item.variations.all %}
                                              <input type="hidden" name="{{ item.variation_category  | lower}}" value="{{ item.variation_value | capfirst }}">
                                            {% endfor %}
-                                             <button class="btn btn-light" type="submit" id="button-minus">+</button>
+                                             <button class="btn btn-light" type="submit" id="button-minus" onclick="return check()">+</button>
                                           </form>
                                         </div>
                                          
                                     </div>
                                 </div>
                             </td>
-                            <td class="total">Rs.{{ cart_item.sub_total }}</td>
+                            <td class="total">$.{{ cart_item.sub_total }}</td>
                             <td class="text-right">
                                 <a href="{% url 'remove_cart_item' cart_item.product.id  cart_item.id %}" onclick="return confirm('Are you want to delete?')" class="btn btn-danger btn-lg" style="border-radius: 10rem;">Remove</a>
                             </td>
@@ -192,8 +192,16 @@
                 </table>
             </div>
             {% endif %}
-            <div class="cart-btn">
-          
+        </div>
+        <div class="cart-btn">
+            <div class="col-lg-6">
+                <div class="cart__discount text-center">
+                    <h6>Discount codes</h6>
+                        <input type="text" name="coupon" id="coupon" placeholder="Coupon code" style="padding: 5px; border: 1px solid #ccc;height:45px;margin-left:160px">
+                        <button  onclick="applycoupon()" style='background-color: black; color: #fff; border-radius: 10rem; padding: 10px 20px; margin-left: 5px;'>Apply</button>
+                        <h6 id="coupon_id" style="padding-top:1rem;" ></h6>
+                </div>
+            </div>
         </div>
         <div class="shopping-method">
             <div class="container">
@@ -215,7 +223,7 @@
                                             <!-- <td class="total">Rs. {{total}}</td> -->
                                             <!-- <td class="sub-total">Rs. {{tax}}</td> -->
                                             <!-- <td class="shipping">Rs. {{shipping_charge}}</td> -->
-                                            <td class="total-cart-p">Rs.{{total}}</td>
+                                            <td class="total-cart-p">$ {{total}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -232,6 +240,66 @@
         </div>
     </div>
         
+
+    <script>
+        let cartQuantity = +document.getElementById("cart-quantity").value;
+        let productQuantity = +document.getElementById("pQuant").value;
+        function check(){
+            let cartQuantity = +document.getElementById("cart-quantity").value;
+        let productQuantity = +document.getElementById("pQuant").value;
+        console.log(cartQuantity,productQuantity)
+            if (cartQuantity >= productQuantity) {
+                alert('Item Limit exceeded..!');
+                return false;
+            } else {
+                return true;
+            }
+        }
+    </script>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function applycoupon(){
+            var url = "{% url 'apply_coupon' %}"
+            var csrftoken = getCookie('csrftoken');
+            var coupon = document.getElementById("coupon").value;
+            let coupon_id = document.getElementById("coupon_id");
+            let grand_total = {{grand_total}}
+                // Call your server to finalize the transaction 
+            fetch(url,{
+                method : "POST",
+                headers:{
+                    "Content-type":"application/json",
+                    "X-CSRFToken":csrftoken,
+                },
+                body:JSON.stringify({
+                    coupon:coupon,
+                    grand_total:grand_total
+                }),
+            })
+            .then(async function (response){
+                const data =await response.json()
+                if(data){
+                    coupon_id.innerHTML = data.message
+                    document.getElementById('grand_total').innerText = `₹ ${data.total}`
+                }
+            });
+        }
+    </script>
     <!-- Cart Page Section End -->
   
 

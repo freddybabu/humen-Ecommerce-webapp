@@ -22,6 +22,11 @@ urlpatterns = [
     path('Variationmange/delete<int:id>',views.delete_variation,name="delete_variation"),
     
     path('orderslist',views.orderslist,name="orderslist"),
-    path('orderslist/<int:order_id>/',views.order_details_admin,name="order_details_admin"),
+    path('orderslist/<int:order_id>',views.order_details_admin,name="order_details_admin"),
     path('change_status/<int:order_id>',views.change_status,name="change_status"),
+    
+    path('coupen_manage',views.coupen_manage,name='coupen_manage'),
+    path('add_coupens',views.add_coupens,name="add_coupens"),
+    path('del_coupens/<int:id>',views.del_coupens,name="del_coupens"),
+    path('edit_coupens/<int:id>',views.edit_coupens,name="edit_coupens"),
 ]

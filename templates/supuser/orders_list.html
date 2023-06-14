@@ -16,11 +16,11 @@
     }
 
     .order-list-table th {
-        background-color: black;
+        background-color: #f5a623;
     }
 
     .status-new {
-        background-color: #FFC107;
+        background-color: #f0e6f2;
     }
 
     .status-accepted {
@@ -28,7 +28,7 @@
     }
 
     .status-completed {
-        background-color: #007BFF;
+        background-color: #428fc9;
     }
 
     .status-cancelled {
@@ -56,7 +56,7 @@
             <ul class="navbar-nav mx-auto h-100">
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'supuser' %}">
-                        <i class="fas fa-tachometer-alt"></i>
+                        <i class="fa fa-folder-o" aria-hidden="true"></i>
                         Dashboard
                         <span class="sr-only">(current)</span>
                     </a>
@@ -78,7 +78,7 @@
                 </li> -->
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'manage' %}">
-                      <i class="far fa-user"></i>
+                     <i class="fa fa-user-plus" aria-hidden="true"></i>
                       Users
                   </a>
                 </li>
@@ -90,20 +90,26 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'categorymanage' %}">
-                      <i class="far fa-user"></i>
+                      <i class="fa fa-asterisk" aria-hidden="true"></i>
                       Category
                   </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'Variationmanage' %}">
-                        <i class="far fa-user"></i>
+                        <i class="fa fa-heartbeat" aria-hidden="true"></i>
                         Variation Manage
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'orderslist' %}">
-                        <i class="far fa-user"></i>
+                        <i class="fa fa-tags" aria-hidden="true"></i>
                         Order Manage
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'coupen_manage' %}">
+                        <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                        Coupons
                     </a>
                 </li>
                 <!-- <li class="nav-item dropdown">
@@ -124,7 +130,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link d-block" href="{% url 'signout' %}">
-                        Admin, <b>Logout</b>
+                        Admin, <b>Logout  <i class="fa fa-sign-out" aria-hidden="true"></i></b>
                     </a>
                 </li>
             </ul>
@@ -160,13 +166,13 @@
                   <td>
                       <form method="POST" action="{% url 'change_status' order.id %}">
                           {% csrf_token %}
-                          <select name="status">
-                              <option value="New">New</option>
-                              <option value="Accepted" >Accepted</option>
-                              <option value="Completed" >Completed</option>
-                              <option value="Cancelled" >Cancelled</option>
+                          <select name="status" style="border-radius: 10rem;">
+                              <option value="New" style="border-radius: 10rem;">New</option>
+                              <option value="Accepted" style="border-radius: 10rem;">Accepted</option>
+                              <option value="Completed"  style="border-radius: 10rem;">Completed</option>
+                              <option value="Cancelled" style="border-radius: 10rem;">Cancelled</option>
                           </select>
-                          <button type="submit">Change</button>
+                          <button type="submit" style="border-radius: 10rem;background-color:#f5a623">Change</button>
                       </form>
                   </td>
               </tr>
