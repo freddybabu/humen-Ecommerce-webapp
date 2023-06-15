@@ -255,51 +255,50 @@
                 return true;
             }
         }
-    </script>
 
-    <script>
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+            function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
             }
-            return cookieValue;
         }
-        function applycoupon(){
-            var url = "{% url 'apply_coupon' %}"
-            var csrftoken = getCookie('csrftoken');
-            var coupon = document.getElementById("coupon").value;
-            let coupon_id = document.getElementById("coupon_id");
-            let grand_total = {{grand_total}}
-                // Call your server to finalize the transaction 
-            fetch(url,{
-                method : "POST",
-                headers:{
-                    "Content-type":"application/json",
-                    "X-CSRFToken":csrftoken,
-                },
-                body:JSON.stringify({
-                    coupon:coupon,
-                    grand_total:grand_total
-                }),
-            })
-            .then(async function (response){
-                const data =await response.json()
-                if(data){
-                    coupon_id.innerHTML = data.message
-                    document.getElementById('grand_total').innerText = `₹ ${data.total}`
-                }
-            });
-        }
+        return cookieValue;
+    }
+    function applycoupon(){
+        var url = "{% url 'apply_coupon' %}"
+        var csrftoken = getCookie('csrftoken');
+        var coupon = document.getElementById("coupon").value
+        let coupon_id = document.getElementById("coupon_id")
+        let grand_total = {{grand_total}}
+            // Call your server to finalize the transaction 
+        fetch(url,{
+            method : "POST",
+            headers:{
+                "Content-type":"application/json",
+                "X-CSRFToken":csrftoken,
+            },
+            body:JSON.stringify({
+                coupon:coupon,
+                grand_total:grand_total
+            }),
+        })
+        .then(async function (response){
+            const data =await response.json()
+            if(data){
+                coupon_id.innerHTML = data.message
+                document.getElementById('grand_total').innerText = `₹ ${data.total}`
+            }
+        });
+    }
     </script>
+
     <!-- Cart Page Section End -->
   
 

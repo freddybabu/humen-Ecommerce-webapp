@@ -10,7 +10,7 @@ from django.conf import settings
 from .forms import RegistrationForm,UserForm,VerifyForm,AddressBookForm,UserProfileForm
 from carts.models import Cart,CartItem
 from store.models import Wishlist,Product
-from .models import Account,AddressBook
+from .models import Account,AddressBook,UserProfile
 from django.contrib.auth.decorators import login_required
 from carts.views import _cart_id
 from django.views.decorators.cache import never_cache
@@ -382,17 +382,23 @@ def activate_address(request):
 ##############################################################################################################
 @login_required(login_url='signin')
 def edit_profile(request):
-    user_form = UserForm(instance=request.user)
-    
+    userprofile = get_object_or_404(UserProfile, user=request.user)
     if request.method == 'POST':
         user_form = UserForm(request.POST,instance=request.user)
-        if user_form.is_valid():
+        profile_form = UserProfileForm(request.POST,request.FILES,instance=userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
-            messages.success(request,"Profile updated successfully")
+            profile_form.save()
+            messages.success(request,"Your profile has been updated")
             return redirect('edit_profile')
-        
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=userprofile)
     context = {
         'user_form':user_form,
-    }
-    return render(request, 'accounts/edit_profile.html',context)
+        'profile_form':profile_form,
+    }   
+    return render(request,'accounts/edit_profile.html',context)
+
+    
       
