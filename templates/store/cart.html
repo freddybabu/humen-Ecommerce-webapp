@@ -162,10 +162,10 @@
                             <td class="price-col">$.{{ cart_item.product.price }}</td>
                             <!-- <td>Color : Blue <br> size : L</td> -->
                             <td class="quantity-col">
-                                <div class="col" style="width: 12rem;border:1px solid black;">
+                                <div class="col" style="width: 9rem;">
                                     <div class="input-group input-spinner">
                                         <div class="input-group-prepend">
-                                            <a href="{% url 'remove_cart' cart_item.product.id  cart_item.id %}" class="btn btn-light" type="button" id="button-plus">-</a>
+                                            <a href="{% url 'remove_cart' cart_item.product.id  cart_item.id %}" class="btn btn-primary" type="button" id="button-plus"><i class="fa-solid fa-minus fa-sm"></i></a>
                                         </div>
                                         <input type="text" class="form-control text-center" value="{{ cart_item.quantity }}">
                                         <div>
@@ -174,7 +174,7 @@
                                            {% for item in cart_item.variations.all %}
                                              <input type="hidden" name="{{ item.variation_category  | lower}}" value="{{ item.variation_value | capfirst }}">
                                            {% endfor %}
-                                             <button class="btn btn-light" type="submit" id="button-minus" onclick="return check()">+</button>
+                                             <button class="btn btn-primary" type="submit" id="button-minus" onclick="return check()"><i class="fa-solid fa-plus fa-sm"></i></button>
                                           </form>
                                         </div>
                                          

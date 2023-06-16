@@ -193,16 +193,21 @@ def orderslist(request):
 def order_details_admin(request, order_id):
     try:
         sub_total = 0
+        shipping_charge = 40
+        grand_total = 0
         order_product = OrderProduct.objects.filter(
             order__order_number=order_id)
         order = Order.objects.get(order_number=order_id)
         for i in order_product:
             sub_total += i.product_price * i.quantity
+        grand_total = sub_total + shipping_charge
 
         context = {
             'order_product': order_product,
             'order': order,
-            'sub_total': sub_total
+            'sub_total': sub_total,
+            'shipping_charge':shipping_charge,
+            'grand_total':grand_total,
         }
     except Order.DoesNotExist:
 

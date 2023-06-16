@@ -3,6 +3,48 @@
 
 {% block content %}
   
+
+
+<style>
+  .invoice {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .invoice h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .invoice table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  .invoice table th,
+  .invoice table td {
+    padding: 10px;
+    border: 1px solid #0d0c0c;
+  }
+
+  .invoice table th {
+    background-color: #c1c5d4;
+    text-align: left;
+  }
+
+  .invoice table tbody td {
+    text-align: center;
+  }
+
+  .invoice table tfoot th {
+    text-align: right;
+  }
+</style>
+
 <nav class="navbar navbar-expand-xl">
   <div class="container h-100">
           <h1 class="tm-site-title mb-0"> Admin Panel</h1>
@@ -98,74 +140,72 @@
 
 </nav>
 
-    <div class="invoice">
-        <h1>Order Details</h1>
-        <table>
-          <tr>
-            <th>Order number</th>
-            <td>#{{order.order_number}}</td>
-          </tr>
-          <tr>
-            <th>Transaction ID</th>
-            <td>#{{order.payment.payment_id}}</td>
-          </tr>
-          <tr>
-            <th>Order date</th>
-            <td>{{order.created_at}}</td>
-          </tr>
-          <tr>
-            <th>Status</th>
-            <td>{{order.payment.status}}</td>
-          </tr>
-        </table>
-        <table>
-          <thead>
-            <tr>
-              <th>Product name</th>
-              <th>Quantity</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in ordr_product %}
-            <tr>
-              <td>{{item.product.product_name}}
-                <p class="text-muted small">
-                  {% if item.variation.all %}
-                  {% for i in item.variation.all %}
-                  {{i.variation_category | capfirst }} : {{i.variation_value | capfirst }}<br>
-                  {% endfor %}
-                  {% endif %}
-                </p>
-              </td>
-              <td>{{item.quantity}}</td>
-              <!-- <td>
-                {% if item.product.offer_price %}
-                    <h5> ${{ item.product.offer_price }}</h5>
-                {% else %}
-                    <h5>${{ item.product.price }}</h5>
-                {% endif %}
-              </td> -->
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <table>
-          <tfoot>
-            <tr>
-              <th colspan="2">Sub Total:</th>
-              <th>$ {{sub_total}}</th>
-            </tr>
-            <!-- <tr>
-              <th colspan="2">Tax:</th>
-              <th>$ {{order.tax}}</th>
-            </tr> -->
-            <tr>
-              <th colspan="2">Grand Total:</th>
-              <th>$ {{order.order_total}}</th>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+<div class="invoice mt-4">
+  <h1>Order Details</h1>
+  <table>
+    <tr>
+      <th>Order number</th>
+      <td>#{{order.order_number}}</td>
+    </tr>
+    <tr>
+      <th>Transaction ID</th>
+      <td>#{{order.payment.payment_id}}</td>
+    </tr>
+    <tr>
+      <th>Order date</th>
+      <td>{{order.created_at}}</td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>{{order.payment.status}}</td>
+    </tr>
+  </table>
+  <table>
+    <thead>
+      <tr>
+        <th>Product name</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order_product %}
+      <tr>
+        <td class="text-color-dark">
+          {{item.product.product_name}}
+          <p class="text-muted small">
+            {% if item.variation.all %}
+               {% for i in item.variation.all %}
+                   {{i.variation_category | capfirst }} : {{i.variation_value | capfirst }}<br>
+               {% endfor %}
+            {% endif %}
+          </p>
+        </td>
+        <td>{{item.quantity}}</td>
+        <td>
+            <h5>${{ item.product.price }}</h5>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <table>
+    <tfoot>
+      <tr>
+        <th colspan="2">Sub Total:</th>
+        <th>$ {{sub_total}}</th>
+      </tr>
+      <tr>
+        <th colspan="2">Shipping Charge:</th>
+        <th>$ {{shipping_charge}}</th>
+      </tr>
+      <tr>
+        <th colspan="2">Grand Total:</th>
+        <th>$ {{ grand_total}}</th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
 
 {% endblock  %}

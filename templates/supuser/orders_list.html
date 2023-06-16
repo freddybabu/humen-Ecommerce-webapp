@@ -157,7 +157,7 @@
           <tbody>
               {% for order in orders %}
               <tr>
-                  <td><a href="{% url 'order_details_admin' order.order_number %}" id="order_number" ></a>{{order.order_number}}</td>
+                  <td><a href="{% url 'order_details_admin' order.order_number %}" id="order_number" style="color: black;" >{{order.order_number}}</a></td>
                   <td>{{ order.first_name }}</td>
                   <td>{{ order.last_name }}</td>
                   <td>{{ order.email }}</td>
