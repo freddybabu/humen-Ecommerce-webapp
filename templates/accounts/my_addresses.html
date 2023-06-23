@@ -4,10 +4,10 @@
   
 
 <section class="section-conten padding-y bg p-5">
-
+     {% include "includes/alerts.html" %}
     <div class="container">
         <div class="row">
-        
+        {% include "includes/dashboard_sidebar.html" %}
         <main class="col-md-9">
             <article class="card">
             <header class="card-header">
@@ -49,7 +49,7 @@
                         <h3 class="text-center mb-4">Oops! Your Address Book is Empty.</h3>
                         <p class="text-center">Add your addresses to easily manage your deliveries.</p>
                         <div class="text-center mt-4">
-                          <a href="#" class="btn btn-primary">Add Address</a>
+                          <a href="{% url 'add_addresses' %}" class="btn btn-primary">Add Address</a>
                         </div>
                     </div> 
                     {% endif %} 

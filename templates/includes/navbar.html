@@ -80,7 +80,8 @@
             <div class="inner-header">
                 <div class="logo">
                     <a href="{% url 'home' %}" class="logo-name">hu<span class="logo-accent">M</span>EN</a>
-                    <img src="{% static 'img/humenlogo.jpg' %}" alt="logo" style="max-width: 90px;">
+                    <!-- <img src="{% static 'img/humenlogo.jpg' %}" alt="logo" style="max-width: 90px;"> -->
+                    <i class="fa-solid fa-mars fa-spin fa-2xl"></i>
                 </div>
                 
                 <div class="header-right">
@@ -91,7 +92,7 @@
                         </div>
                     </form>
                     
-                    <img src="{% static 'img/icons/man.png' %}" alt="">
+                   <!-- <a href="{% url 'edit_profile' %}"><img src="{% static 'img/icons/man.png' %}" alt="profile"></a> -->
                     <a href="{% url 'cart' %}" class="text-dark">
                         <!-- <img src="{% static 'img/icons/bag.png' %}" alt=""> -->
                         <i class="fa-sharp fa-solid fa-cart-shopping"></i>
@@ -129,7 +130,8 @@
                         </li> -->
                         <li><a class="{% if 'wishlist' in request.path %}active{% endif %}" href="{% url 'wishlist' %}">Wishlist</a></li>
                         <li><a href="{% url 'cart' %}">Cart</a></li>
-                        <li><a href="{% url 'my_orders' %}">Orders</a></li>
+                        <!-- <li><a href="{% url 'my_orders' %}">Orders</a></li> -->
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
                     </ul>
                 </nav>
             </div>

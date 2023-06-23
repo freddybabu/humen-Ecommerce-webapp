@@ -1,6 +1,6 @@
 import re
 from django import forms
-from .models import Account,AddressBook,UserProfile 
+from .models import Account,AddressBook
 
 
 class RegistrationForm(forms.ModelForm):
@@ -45,8 +45,6 @@ class RegistrationForm(forms.ModelForm):
                 raise forms.ValidationError("Password must contain at least one uppercase letter.")
             if not re.search(r'[a-z]', password):
                 raise forms.ValidationError("Password must contain at least one lowercase letter.")
-            if not re.search(r'[!@#$%^&*()-=_+]', password):
-                raise forms.ValidationError("Password must contain at least one special character (!@#$%^&*()-=_+).")
 
         return clean_data
         
@@ -71,17 +69,7 @@ class UserForm(forms.ModelForm):
         
     
         
-class UserProfileForm(forms.ModelForm):
-    profile_picture = forms.ImageField(required=False,error_messages= {'invalid':"image files only"}, widget=forms.FileInput)
-    class Meta:
-        model = UserProfile
-        fields = ("address_line_1","address_line_2","city","state","country","profile_picture")
-        
-    def __init__(self, *args, **kwargs):
-        super(UserProfileForm,self).__init__( *args, **kwargs)
-        for field in self.fields:
-             self.fields[field].widget.attrs['class'] = 'form-control'
-        
+    
     
         
 class AddressBookForm(forms.ModelForm):
@@ -101,3 +89,5 @@ class AddressBookForm(forms.ModelForm):
         model = AddressBook
         fields = ['first_name','last_name','phone','email','address_line_1','address_line_2','city','state','country','pincode','status']
         exclude = ("user",)
+        
+        

@@ -1,19 +1,62 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.core import serializers
 from django.forms import inlineformset_factory
 from accounts.models import Account
 from category.models import Category
 from orders.models import Order, OrderProduct
 from store.models import Product, ProductImage, Variation
 from supuser.forms import CategoryForm, ProductForm, VariationForm, images,CouponForm
-
+from datetime import datetime,timedelta,timezone
 from supuser.models import Coupon
 # Create your views here.
 
 
 def supuser(request):
     if 'email' in request.session:
-        return render(request, 'supuser/suphome.html')
-    return redirect('signin')
+        orders = Order.objects.all().order_by('-created_at')[:5]
+    
+        users = Account.objects.all()
+        users_count = users.count()
+
+        myproducts = Product.objects.all().order_by('-id')
+    
+        categories = Category.objects.all()
+        category_count = categories.count()
+    
+        total_order = Order.objects.all()
+        total_orders = total_order.count()
+    
+        today = datetime.today()
+        start_of_week = today - timedelta(days=today.weekday())
+        dates = [start_of_week + timedelta(days=i) for i in range(7)]
+        sales = []
+        for date in dates:
+            Orders = OrderProduct.objects.filter(
+                ordered=True,
+                created_at__year=date.year,
+                created_at__month=date.month,
+                created_at__day=date.day,
+            )
+            total_sales = sum(order.product_price * order.quantity for order in Orders)
+            sales.append(total_sales)
+        sums = sum(sales)
+        product_count = myproducts.exclude(orderproduct__ordered=True).count()
+        context = {
+            'orders': orders,
+            'product_count': product_count,
+            'category_count': category_count,
+            'products': myproducts,
+            'total_orders': total_orders,
+            "users_count": users_count,
+            'dates': dates,
+            'sales': sales,
+            'sums': sums,
+        }
+        return render(request, 'supuser/suphome.html', context)
+    else:
+        return redirect('signin')
 
 
 def usermanage(request):
@@ -275,4 +318,21 @@ def edit_coupens(request,id):
     return render(request,'supuser/edit_coupen.html',context)
     
 
-        
+  
+def add_order_filter(request):
+    body = json.loads(request.body)
+    try:
+        start_date =datetime.strptime(body['from'],'%Y-%m-%d')
+        end_date = datetime.strptime(body['to'],'%Y-%m-%d')
+    except ValueError:
+        end_date = timezone.now()
+        start_date = end_date - timedelta(days=end_date.weekday())
+    try:
+        orders = Order.objects.filter(created_at__gte=start_date, created_at__lte=end_date)
+        json_data = serializers.serialize('json', orders)
+    except Order.DoesNotExist:
+        orders = None     
+    data ={
+             "order":json_data,
+            }
+    return JsonResponse(data)      

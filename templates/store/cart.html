@@ -73,6 +73,7 @@
     <!-- Header Info Begin -->
     <div class="header-info" style="margin-top: 10px;">
         <div class="container-fluid">
+            {% include "includes/alerts.html" %}
             <div class="row">
                 <div class="col-md-4">
                     <div class="header-item">
@@ -198,7 +199,7 @@
                 <div class="cart__discount text-center">
                     <h6>Discount codes</h6>
                         <input type="text" name="coupon" id="coupon" placeholder="Coupon code" style="padding: 5px; border: 1px solid #ccc;height:45px;margin-left:160px">
-                        <button  onclick="applycoupon()" style='background-color: black; color: #fff; border-radius: 10rem; padding: 10px 20px; margin-left: 5px;'>Apply</button>
+                        <button  onclick="applycoupon()" style='background-color: black; color: #fff; padding: 10px 20px; margin-left: 5px;'>Apply</button>
                         <h6 id="coupon_id" style="padding-top:1rem;" ></h6>
                 </div>
             </div>
@@ -223,7 +224,7 @@
                                             <!-- <td class="total">Rs. {{total}}</td> -->
                                             <!-- <td class="sub-total">Rs. {{tax}}</td> -->
                                             <!-- <td class="shipping">Rs. {{shipping_charge}}</td> -->
-                                            <td class="total-cart-p">$ {{total}}</td>
+                                            <td class="total-cart-p" id="grand_total">$ {{total}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -255,8 +256,10 @@
                 return true;
             }
         }
+    </script>
 
-            function getCookie(name) {
+    <script>
+    function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');
@@ -276,7 +279,8 @@
         var csrftoken = getCookie('csrftoken');
         var coupon = document.getElementById("coupon").value
         let coupon_id = document.getElementById("coupon_id")
-        let grand_total = {{grand_total}}
+        let grand_total = {{total}}
+        console.log(grand_total)
             // Call your server to finalize the transaction 
         fetch(url,{
             method : "POST",
@@ -297,7 +301,71 @@
             }
         });
     }
-    </script>
+
+    $(document).ready(function() {
+        $('.btn-plus').click(function(e) {
+          e.preventDefault();
+          var form = $(this).closest('form');
+          var productId = form.data('product-id');
+          var url = form.attr('action');
+      
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              "Content-type": "application/json",
+              "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify({
+              product_id: productId,
+            }),
+          })
+          .then(async function(response) {
+            const data = await response.json();
+            if (data.success) {
+              $('#cart-quantity').text(data.quantity);
+              var quantityInput = form.find('.quantity-input');
+              quantityInput.val(parseInt(quantityInput.val()) + 1);
+              document.getElementById('grand_total').innerText = `₹ ${data.total}`;
+            }
+          });
+        });
+      
+        $('.btn-minus').click(function(e) {
+          e.preventDefault();
+          var form = $(this).closest('form');
+          var productId = form.data('product-id');
+          var url = form.attr('action');
+      
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              "Content-type": "application/json",
+              "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify({
+              product_id: productId,
+            }),
+          })
+          .then(async function(response) {
+            const data = await response.json();
+            if (data.success) {
+              $('#cart-quantity').text(data.quantity);
+              var quantityInput = form.find('.quantity-input');
+              var newQuantity = parseInt(quantityInput.val()) - 1;
+              if (newQuantity < 1) {
+                newQuantity = 1; // Prevent negative quantity
+              }
+              quantityInput.val(newQuantity);
+              document.getElementById('grand_total').innerText = `₹ ${data.total}`;
+            }
+          });
+        });
+      });
+</script>
+
+
+
+    
 
     <!-- Cart Page Section End -->
   

@@ -71,11 +71,25 @@ class OrderProduct(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    objects = models.Manager()
     
     def __str__(self) -> str:
         return self.product.product_name
     
     
+
+class Return(models.Model):
+    order = models.ForeignKey(Order,on_delete=models.CASCADE)
+    product = models.ForeignKey(OrderProduct,on_delete=models.CASCADE)
+    reason = models.CharField(max_length=200)
+    status = models.CharField(max_length=50,default="pending")
+    user   = models.ForeignKey(Account,on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
-    
+   
+class Wallet(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    balance = models.IntegerField(default=0)
+     
 

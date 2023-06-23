@@ -16,10 +16,11 @@
   </style>
 <aside class="md-3">
     <ul class="list-group">
-        <a class="list-group-item" href="{% url 'dashboard' %}">Dashboard</a>
-        <a class="list-group-item" href="{% url 'my_orders' %}">My orders</a>
-        <a class="list-group-item" href="{% url 'edit_profile' %}">My profile</a>
-        <a class="list-group-item" href="{% url 'my_addresses' %}">Address Book</a>
+        <a class="list-group-item" href="{% url 'dashboard' %}">Dashboard <i class="fa-solid fa-folder"></i></a>
+        <a class="list-group-item" href="{% url 'my_orders' %}">My orders  <i class="fa-solid fa-list"></i></a>
+        <a class="list-group-item" href="{% url 'edit_profile' %}">My profile <i class="fa-sharp fa-solid fa-user"></i></a>
+        <a class="list-group-item" href="{% url 'change_password' %}">Change password <i class="fa-solid fa-lock"></i></a>
+        <a class="list-group-item" href="{% url 'my_addresses' %}">Address Book <i class="fa-solid fa-address-book"></i></a>
 
     </ul>
      <br>

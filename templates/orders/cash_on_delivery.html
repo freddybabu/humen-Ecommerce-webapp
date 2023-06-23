@@ -1,18 +1,25 @@
 {% extends "base.html" %}
-{% load static %}
-{% block content %}
+ {% load static %}
 
+{% block content %}
+  
 <!-- Page Add Section Begin -->
+
 <div class="d-flex justify-content-between">
-    <a href="{% url 'my_orders' %}"><i class="fa-solid fa-arrow-left" style="color:black;margin-left:380px"> back</i></a>
-    <button class="btn btn-secondary btn-sm mt-4" onclick="downloadPDF()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+    <a href="{% url 'home' %}"><i class="fa fa-chevron-left" style="color: #000;"> BACK</i></a>
 </div>
 
-<div class="container" style="margin: 0 auto; width: 50%; background: #f1f1f1; margin-top: 50px;padding:50px; margin-bottom: 50px; border: 1px solid #ccc;" id="topdf">
-    <div class="row invoice row-printable" >
-        <div>
-            <p class="logo-name">hu<span class="logo-accent">M</span>EN</p>
-        </div>
+<div class="container" style="margin-top: 50px;">
+    <i class="fa fa-check-circle" style="font-size: 72px;margin-bottom: 20px;color: #28A745; margin-left:510px"></i>
+    <h2 class="text-center">Order Successful</h2>
+	<br>
+	<div class="text-center">
+		<a href="{% url 'store' %}" class="btn btn-success" style="border-radius: 10rem;">Shop more</a>
+	</div>
+</div>
+
+<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
+    <div class="row invoice row-printable">
         <div class="col-md-12">
             <!-- col-lg-12 start here -->
             <div class="panel panel-default plain" id="dash_0">
@@ -20,11 +27,9 @@
                 <div class="panel-body p30">
                     <div class="row">
                         <!-- Start .row -->
-                        <div class="col-lg-6">
-                            <!-- col-lg-6 start here -->
-                            <div class="invoice-logo"> 
-                                <img src="{% static 'img/logo1.png' %}" alt="" width="88rem" >
-                            </div>
+                        <div class="logo">
+                            <p class="logo-name">hu<span class="logo-accent">M</span>EN</p>
+                            <!-- <img src="{% static 'img/humenlogo.jpg' %}" alt="logo" style="max-width: 90px;"> -->
                         </div>
                         <!-- col-lg-6 end here -->
                         <div class="col-lg-6">
@@ -32,10 +37,10 @@
                             <div class="invoice-from">
                                 <ul class="list-unstyled text-right">
                                     <li><strong>Invoiced To</strong></li>
-                                    <li>{{order.first_name}}</li>
+                                    <li>{{order.full_name}}</li>
                                     <li>{{order.full_address}}</li>
                                     <li>{{order.city}}, {{order.state}}, {{order.country}}</li>
-                                    <li>PIN:{{order.pincode}}</li>
+                                    <li>PIN : {{order.pincode}}</li>
                                 </ul>
                             </div>
                         </div>
@@ -46,9 +51,9 @@
                                 <div class="well">
                                     <ul class="list-unstyled mb0">
                                         <li><strong>Order:</strong> #{{order.order_number}}</li>
-                                        <li><strong>Transaction ID:</strong> #{{order.payment.payment_id}}</li>
+                                        <li><strong>Transaction ID:</strong> #{{transID}}</li>
                                         <li><strong>Order Date:</strong> {{order.created_at}}</li>
-                                        <li><strong>Status:</strong> {{order.payment.status}}</li>
+                                        <li><strong>Status:</strong> {{payment.status}}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -64,20 +69,21 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for item in order_product %}
+                                            {%  for item in order_product %}
                                             <tr>
-                                                <td>
-                                                    {{item.product.product_name}}
-                                                    <p class="text-muted small">
-                                                        {% if item.variation.all %}
-                                                            {% for i in item.variation.all %}
-                                                                {{i.variation_category | capfirst}}: {{i.variation_value | capfirst}}<br>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    </p>
+                                                <td>{{item.product.product_name}}
+                                                <p class="text-muted small">
+                                                    {% if item.variation.all %}
+                                                        {% for i in item.variation.all %}
+                                                            {{i.variation_category | capfirst }} : {{i.variation_value | capfirst }}<br>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </p>
                                                 </td>
                                                 <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">$ {{ item.product.price }}</td>
+                                                <td class="text-center">
+                                                        <h5>${{ item.product.price }}</h5>
+                                                </td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -100,8 +106,8 @@
                                 </div>
                             </div>
                             <div class="invoice-footer mt25">
-                                <p class="text-center">Thank you for shopping with us <i class="fa-regular fa-face-smile"></i></p>
-                                <span><i class="fa-regular fa-at"></i> team huMEN</span>
+                                <p class="text-center">Thank you for shopping with us!</p>
+                                <p>team huMEN</p>
                             </div>
                         </div>
                         <!-- col-lg-12 end here -->
@@ -113,25 +119,7 @@
         </div>
         <!-- col-lg-12 end here -->
     </div>
-</div>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-<script>
-function downloadPDF() {
-    const element = document.getElementById('topdf');
 
-    // configure the html2pdf options
-    const options = {
-        filename: 'Invoice.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-    
-
-    // convert the element to PDF
-    html2pdf().from(element).set(options).save();
-}
-</script>
-  
 {% endblock  %}

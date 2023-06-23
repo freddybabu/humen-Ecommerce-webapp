@@ -8,4 +8,6 @@ urlpatterns = [
     path('remove_cart_item/<int:product_id>/<int:cart_item_id>/',views.remove_cart_item,name='remove_cart_item'),
     path('apply_coupon',views.apply_coupon,name="apply_coupon"),
     path('checkout/',views.checkout,name='checkout'),
+    
+    # path('filter-data',views.filter_data,name='filter-data'),
 ]

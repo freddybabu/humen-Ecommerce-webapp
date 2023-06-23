@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product,Variation,ProductImage
+from .models import Product,Variation,ProductImage,ReviewRating
 # Register your models here.
 
 class PictureInline(admin.StackedInline):
@@ -19,6 +19,8 @@ class VariationAdmin(admin.ModelAdmin):
 
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Variation,VariationAdmin)
+admin.site.register(ReviewRating)
+
 
     
 

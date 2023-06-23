@@ -29,4 +29,6 @@ urlpatterns = [
     path('add_coupens',views.add_coupens,name="add_coupens"),
     path('del_coupens/<int:id>',views.del_coupens,name="del_coupens"),
     path('edit_coupens/<int:id>',views.edit_coupens,name="edit_coupens"),
+    
+    path('add_order_filter',views.add_order_filter,name="add_order_filter"),
 ]

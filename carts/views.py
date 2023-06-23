@@ -1,13 +1,16 @@
 import json
+from datetime import date
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render,redirect,get_object_or_404
 from store.models import Product,Variation
 from .models import Cart,CartItem
+from accounts.models import AddressBook
 from supuser.models import Coupon
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from datetime import datetime
+from django.contrib import messages
 
 # Create your views here.
 
@@ -198,6 +201,13 @@ def checkout(request,total=0, quantity=0):
             quantity += cart_item.quantity
         shipping_charge = 40
         grand_total = total + shipping_charge
+        
+        if(request.session.get('total')):
+            grand_total=request.session.get('total')
+        
+        addresses = AddressBook.objects.filter(user=request.user).order_by('-id')
+        cadd  = AddressBook.objects.filter(user=request.user,status=True).first()
+        
     except ObjectDoesNotExist:
            pass
     
@@ -207,42 +217,46 @@ def checkout(request,total=0, quantity=0):
         'cart_items':cart_items,
         'grand_total':grand_total,
         'shipping_charge':shipping_charge,
+        'addresses':addresses,
+        'cadd':cadd
     }
     return render(request,'store/checkout.html', context)
 
 @require_POST
 def apply_coupon(request):
     body = json.loads(request.body)
+    print(body)
     grand_total = int(body['grand_total'])
     coupon_code = body['coupon']
     try:
         coupon = Coupon.objects.get(code__iexact=coupon_code)
     except Coupon.DoesNotExist:
         data = {
-            "total":grand_total,
-            "message":"Not a valid coupon"
+            "total": grand_total,
+            "message": "Not a Valid Coupon"
         }
     else:
-        today = datetime.now().date()
-        start_date = coupon.active_date
-        expiry_date = coupon.expiry_date
+        today = date.today()
+        valid_from = coupon.active_date
+        valid_to = coupon.expiry_date
         min_amount = int(coupon.min_amount)
-        if min_amount < grand_total and start_date <= today <= expiry_date:
-            grand_total -= int(coupon.discount)
-            request.session['total'] = grand_total
+        if min_amount < grand_total and valid_from <= today <= valid_to:
+            grand_total = grand_total - int(coupon.discount)
+            request.session['total'] = grand_total  # Update the session variable
             data = {
-                "total":grand_total,
-                "message":f"{coupon.code} Applied"
+                "total": grand_total,
+                "message": f"{coupon.code} Applied"
             }
         else:
             data = {
-                "total":grand_total,
-                "message":"Not a valid coupon"
+                "total": grand_total,
+                "message": "Not a Valid Coupon"
             }
     return JsonResponse(data)
-    
         
-        
+   
+
+         
         
         
     

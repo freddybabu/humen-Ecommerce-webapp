@@ -9,6 +9,7 @@
 <br />
 
 <section class="section-conten padding-y bg">
+  {% include "includes/alerts.html" %}
   <div class="container">
     <div class="row">
       {% include 'includes/dashboard_sidebar.html' %} {% if orders %}
@@ -22,13 +23,13 @@
               <table class="table table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th>Order No#</th>
-                    <th class="text-center">Billing Name</th>
-                    <th class="text-center">Phone No</th>
-                    <th class="text-center">Total Amount</th>
-                    <th class="text-center">Date</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center">Actions</th>
+                    <th>Order No <i class="fa-sharp fa-solid fa-hashtag"></i></th>
+                    <th class="text-center">Billing Name <i class="fa-solid fa-user"></i></th>
+                    <th class="text-center">Phone No <i class="fa-solid fa-phone"></i></th>
+                    <th class="text-center">Total Amount <i class="fa-solid fa-sack-dollar"></i></th>
+                    <th class="text-center">Date <i class="fa-solid fa-calendar-days"></i></th>
+                    <th class="text-center">Status <i class="fa-brands fa-usps"></i></th>
+                    <th class="text-center">Actions <i class="fa-sharp fa-solid fa-cart-circle-exclamation"></i></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -46,19 +47,22 @@
                     <td class="text-center">{{ ord.status }}</td>
                     <td class="text-center">
                       {% if ord.status != 'Cancelled' %}
-                      <form
-                        method="POST"
-                        action="{% url 'cancel_order' ord.id %}"
-                      >
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm" style="border-radius: 10rem;" onclick="return confirm('Do you really want to cancel the order?')">
-                          Cancel Order
-                        </button>
-                      </form>
+                        {% if ord.status != 'Completed' %}
+                          <form method="POST" action="{% url 'cancel_order' ord.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" style="border-radius: 10rem;" onclick="return confirm('Are you sure want to cancel?')">
+                              Cancel Order
+                            </button>
+                          </form>
+                        {% else %}
+                          <h5>Delivered</h5>
+                        {% endif %}
                       {% else %}
-                      <span class="text-muted">Cancelled</span>
+                        <span class="text-muted">Cancelled</span>
                       {% endif %}
                     </td>
+                    
+                    
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -78,5 +82,25 @@
 
 <br />
 <br />
+
+<script>
+  function confirmDelete(event) {
+      event.preventDefault(); // Prevent the form from immediately submitting
+      var form = event.target.closest('form'); // Find the closest form element
+  
+      swal({
+          title: "Do you really want to delete?",
+          icon: "warning",
+          buttons: {
+              cancel: "No",
+              confirm: "Yes"
+          },
+      }).then(function (confirmed) {
+          if (confirmed) {
+              form.submit(); // Submit the form
+          }
+      });
+  }
+</script>
   
 {% endblock  %}

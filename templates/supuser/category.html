@@ -88,7 +88,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link d-block" href="{% url 'signout' %}">
-                        Admin, <b>Logout  <i class="fa fa-sign-out" aria-hidden="true"></i></b>
+                         <b>Logout  <i class="fa fa-sign-out" aria-hidden="true"></i></b>
                     </a>
                 </li>
             </ul>
@@ -100,13 +100,13 @@
   <div class="row">
       <div class="col-sm-12">
           <nav class="navbar d-flex justify-content-between">
-            <h3>Categories</h3>
+            <h3 class="text-white p-4">Categories</h3>
             <a href="{% url 'add_category' %}" class="btn btn-primary m-2" style="border-radius: 10rem;">Add Category</a>
           </nav>
           {% if category %}
           <table class="table table-striped mt-3">
               <thead>
-                  <tr>
+                  <tr style="background-color: #f5a623; color:black">
                       <th>Category Name</th>
                       <th>Slug</th>
                       <th>Description</th>

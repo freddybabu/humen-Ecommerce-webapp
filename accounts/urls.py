@@ -26,5 +26,10 @@ urlpatterns = [
     path('my_addresses/',views.my_addresses,name='my_addresses'),
     path('my_addresses/add_addresses',views.add_addresses,name='add_addresses'),
     path('activate-address/',views.activate_address,name='activate-address'),
-    path('edit_profile',views.edit_profile,name='edit_profile'),
+    path('edit_profile/',views.edit_profile,name='edit_profile'),
+    path('change_password/',views.change_password,name='change_password'),
+    
+    path('contact/',views.contact,name='contact'),
+    
+    # path('return/<int:order_id>/<int:product_id>',views.initiate_return,name='return'),
 ]

@@ -66,6 +66,110 @@
     
 </style>
 
+<style>
+    .thumb_list {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        display: flex;
+
+      }
+      
+      @media (max-width: 600px) {
+        /* For small screens */
+        .thumb_list {
+          width: 250px;
+        }
+      }
+      
+      @media (min-width: 601px) {
+        /* For large screens */
+        .thumb_list {
+          width: 400px;
+        }
+      }
+      
+    .thumb_list img {
+      width: 80px;
+      margin: 10px;
+      border-radius: 10px;
+      opacity: 0.8;
+      cursor: pointer;
+      transition: transform 0.5s;
+    }
+  
+    .thumb_list img:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  
+    .thumb {
+      padding: 20px;
+  
+    }
+  
+    .g_wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .main_img {
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 600px; /* Set a fixed height for the container */
+    }
+  
+    .main_img img {
+      border-radius: 5px;
+      max-width: 100%;
+      height: auto;
+      object-fit: fill;
+    }
+    
+    .zoom_image {
+      overflow: hidden;
+      margin: 0 auto;
+      border-radius: 0.5rem;
+      cursor: zoom-in;
+    
+      &.zoom_mode_active {
+        cursor: zoom-out;
+      }
+    
+      img {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        transition: transform 200ms ease-out;
+      }
+    }
+    
+    @media (max-width: 767px) {
+      .main_img {
+        height: auto;
+        max-height: 400px; /* Adjust the desired height for phone views */
+      }
+      
+      .thumb_list {
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      
+      .thumb_list img {
+        margin: 5px;
+      }
+    }
+
+
+  </style>
+
     <!-- Page Add Section Begin -->
     <section class="page-add">
         <div class="container">
@@ -90,7 +194,7 @@
     <section class="product-page mb-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
+                <!-- <div class="col-lg-6">
                     <div class="product-slider-owl-carousel">
                         <div class="product-img">
                             <figure>
@@ -109,34 +213,54 @@
                         {% endfor %}
                     </div>
                     
-                </div>
-
-
-                <!-- <div class="col-lg-6">
-                    <div class="product-slider-owl-carousel owl-carousel">
-                        <div class="product-img">
-                            <figure>
-                                <img src="{{single_product.images.url}}" data-zoom-image="{{single_product.images.url}}" alt="" id="main_product_image">
-                                <div class="p-status">new</div>
-                            </figure>
-                        </div>
-                        {% for pic in pictures %}
-                        <div class="product-img">
-                            <figure>
-                                <img src="{{pic.images.url}}" alt="">
-                                <div class="p-status">new</div>
-                            </figure>
-                        </div>
-                        {% endfor %}
-                    </div>
                 </div> -->
+
+                                <!-- Product Images-->
+                                <div class="col-12 col-md-6 col-xl-6 g_wrapper" id="slide-wrapper">
+                                    <div class="main_img ">
+                                        <picture class="">
+                                            <div class="zoom_image">
+                                            <img class="img-fluid w-100 " id="large_img" src="{{single_product.images.url}}" loading="lazy">
+                                        </div>
+                                        </picture>
+                                    </div>
+                                    <div class="thumb" >
+                                        <ul class="thumb_list">
+                                            <li class="thumb_item "><img onclick="image_gal(this)" src="{{single_product.images.url}}" alt=""></li>
+                                            {% for pic in pictures %}
+                                            <li class="thumb_item "><img onclick="image_gal(this)" src="{{pic.images.url}}" alt=""></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="thumb" >
+                                        <ul class="thumb_list">
+                                            <li class="thumb_item "><img onclick="image_gal(this)" src="{{data.image.url}}" alt=""></li>
+                                            {% for image in images %}
+                                            <li class="thumb_item "><img onclick="image_gal(this)" src="{{image.image.url}}" alt=""></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+
+                                    <script>
+                                        function image_gal(img) {
+                                            var a = img.src;
+                                            document.getElementById("large_img").src = a;
+                                        }
+                                    </script>
+                                </div>
+
                 <div class="col-lg-6 ">
                 <form action="{% url 'add_cart' single_product.id %}" method="POST">
                   {% csrf_token %}
                     <div class="product-content" style="margin-left: 6rem;">
                         <h2>{{single_product.product_name}}</h2>
                         <div class="pc-meta">
-                            <h5>₹ {{single_product.price}}</h5>
+                           <h5>{% if single_product.offer_price %}
+                              <h5>price: <del style="color: red;">$ {{single_product.price}}</del></h5>
+                              <h5>offer price: $ {{single_product.offer_price}}</h5>
+                                {% else %}
+                                 <h5>$ {{single_product.price}}</h5>
+                                {% endif %}</h5>
                             <div class="rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -173,13 +297,7 @@
 
                             </div>
                         <!-- </div>                      -->
-                        <!-- <div class="product-quantity">
-                            <div class="pro-qty">
-                                <button class="qty-btn qty-minus" type="button">-</button>
-                                <input class="qty-input" type="text" value="0">
-                                <button class="qty-btn qty-plus" type="button">+</button>
-                            </div>
-                        </div> -->
+                            
                         {% if single_product.stock <= 0 %}
                           <h5 class="text-danger mt-3"> Out of stock</h5>
                           {% else %}
@@ -214,5 +332,57 @@
     <script>
         imageZoom("myimage", "myresult");
     </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+          var isActiveMode = false;
+          $(".zoom_image")
+            .on("click", function() {
+              isActiveMode = !isActiveMode;
+              if (isActiveMode) {
+                $(this).addClass("zoom_mode_active");
+                if ($(window).width() > 767) {
+                  $(this).children("img").css({ transform: "scale(2)" });
+                } else {
+                  $(this).children("img").css({ transform: "scale(5)" });
+                }
+              } else {
+                $(this).removeClass("zoom_mode_active");
+                $(this).children("img").css({ transform: "scale(1)" });
+              }
+            })
+            .on("mousemove", function(e) {
+              $(this)
+                .children("img")
+                .css({
+                  "transform-origin":
+                    ((e.pageX - $(this).offset().left) / $(this).width()) * 100 +
+                    "% " +
+                    ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +
+                    "%",
+                });
+            });
+        
+        $(document).on("click", function(event) {
+            // Check if the clicked element is not within .zoom_image
+            if (!$(event.target).closest(".zoom_image").length) {
+              $(".zoom_image").removeClass("zoom_mode_active");
+              $(".zoom_image img").css({ transform: "scale(1)" });
+              isActiveMode = false;
+            }
+          });
+      
+          // Reset image zoom when changing the image source
+          function image_gal(img) {
+            var a = img.src;
+            $("#large_img").attr("src", a);
+            $(".zoom_image").removeClass("zoom_mode_active");
+            $(".zoom_image img").css({ transform: "scale(1)" });
+            isActiveMode = false;
+          }
+        });
+      </script>
         
 {% endblock  %}

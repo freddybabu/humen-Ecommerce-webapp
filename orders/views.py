@@ -2,10 +2,12 @@ import datetime
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from carts.models import CartItem
-from .forms import OrderForm
+from .forms import OrderForm,ReturnForm
+from accounts.models import AddressBook
 import datetime
-from .models import Order,OrderProduct,Payment
+from .models import Order,OrderProduct,Payment,Return
 import json
+import random
 from store.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -94,8 +96,10 @@ def place_order(request, total=0,quantity=0):
     grand_total = total + shipping_charge
     
     if request.method == 'POST':
+        print('post')
         form = OrderForm(request.POST)
         if form.is_valid():
+            print('if case')
             # store all the billing information inside order table
             data = Order()
             data.user = current_user
@@ -171,9 +175,111 @@ def order_complete(request):
         return redirect('home')
         
        
+def cash_on_delivery(request):
+    # body = json.loads(request.body)
+    yr = int(datetime.date.today().strftime('%Y'))
+    dt = int(datetime.date.today().strftime('%d'))
+    mt = int(datetime.date.today().strftime('%m'))
+    d = datetime.date(yr, mt, dt)
+    current_date = d.strftime("%Y%m%d")
 
-
-
+    random_number = random.randint(1, 1000)
     
-            
+    # Combine current date and random number to create the order number
+    order_num = current_date + str(random_number)
+    print(order_num)
+    order = Order.objects.latest('created_at')
+    # order = Order.objects.get(user = request.user, is_ordered = False)
+
+    payment = Payment(
+        user=request.user,
+        payment_method="COD",
+        amount_paid=order.order_total,
+        status= "New"
+    )
+    payment.save()
+    
+    order.payment = payment
+    order.is_ordered = True
+    order.save()
+    
+    #move the cart items to order product table
+    orderproduct = OrderProduct.objects.filter(order_id =order.id)
+    shipping_charge = 40
+    sub_total = 0
+    for item in orderproduct:
+        sub_total = item.product_price*item.quantity
+        
+    grand_total = sub_total+shipping_charge
+    cart_items = CartItem.objects.filter(user = request.user)
+    for item in cart_items:
+        orderproduct = OrderProduct()
+        orderproduct.order_id = order.id
+        orderproduct.payment = payment
+        orderproduct.user_id = order.user.id
+        orderproduct.product_id = item.product_id
+        orderproduct.quantity = item.quantity
+        orderproduct.product_price = item.product.price
+        orderproduct.ordered = True
+        orderproduct.save()
+
+        cart_item = CartItem.objects.get(id = item.id)
+        product_variation = cart_item.variations.all()
+        orderproduct = OrderProduct.objects.get(id = orderproduct.id)
+        orderproduct.variations.set(product_variation)
+        orderproduct.save()
+
+
+
+        #reduce the quantity of sold products
+        product = Product.objects.get(id=item.product_id)
+        product.stock -= item.quantity
+        product.save()
+
+        # item.delete()
+    CartItem.objects.filter(user=request.user).delete()
+    context={
+        'order':order,
+        'orderproduct':orderproduct,
+        'payment':payment,
+        'sub_total':sub_total,
+        'shipping_charge':shipping_charge,
+        'grand_total':grand_total  
+    }
+
+    return render(request,'orders/cash_on_delivery.html',context)
+        
+   
+def initiate_return(request, order_id, product_id):
+    order = Order.objects.get(id=order_id)
+    if order.customer != request.user:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = ReturnForm(request.POST)
+        if form.is_valid():
+            product_id = product_id
+            product = Product.objects.get(id=product_id)
+            orderitem = OrderProduct.objects.get(order = order, product=product)
+            reason = form.cleaned_data["reason"]
+            new_return = Return(
+                order=order,
+                product=orderitem,
+                reason=reason,
+                status="pending",
+                user=request.user
+            )
+            new_return.save()
+            order.status="Return requested"
+            orderitem.status="Return requested"
+            orderitem.save()
+            return redirect('place_order')
+    else:
+        form=ReturnForm()
+        product=Product.objects.get(id=product_id)
+        orderitem=OrderProduct.objects.get(order=order,product=product)
+        form.product = orderitem
+        print(orderitem.product)
+    return render(request,'orders/return_product.html',{"order":order,"form":form,"order_item":orderitem})
+    
             

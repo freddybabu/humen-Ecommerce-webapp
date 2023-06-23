@@ -3,73 +3,42 @@
 {% block content %}
 
     <!-- ========================= SECTION CONTENT ========================= -->
-    <section class="section-content padding-y bg mt-4 mb-4">
+    <section class="section-content padding-y bg mt-4">
         {% include 'includes/alerts.html' %}
         <div class="container">
             <div class="row">
                 {% include 'includes/dashboard_sidebar.html' %}
      
-                <main class="col-md-9"> 
+                <main class="col-md-9">
                     <div class="card">
                         <header class="card-header">
                             <h2 class="text-center">User Profile</h2>
                         </header>
                         <div class="card-body">
-                            <div class="text-right">
-                                <img src="{{ userprofile.profile_picture.url }}" alt="profile picture">
-                            </div>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <form method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
+                                <div class="col-md-6">
+                                    <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                                    <br>
+                                    <form method="post" action="{% url 'edit_profile' %}">
                                         {% csrf_token %}
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label>First Name</label>
-                                                {{ user_form.first_name }}
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label>Last Name</label>
-                                                {{ user_form.last_name }}
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label>Phone Number</label>
-                                                {{ user_form.phone_number }}
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label>Profile Picture</label>
-                                                {{ profile_form.profile_picture }}
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Address Line 1</label>
-                                            {{ profile_form.address_line_1 }}
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Address Line 2</label>
-                                            {{ profile_form.address_line_2 }}
-
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-4">
-                                                <label>City</label>
-                                                {{ profile_form.city }}
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label>State</label>
-                                                {{ profile_form.state }}
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label>Country</label>
-                                                {{ profile_form.country }}
-                                            </div>
-                                        </div>
-
-                                        <input type="submit" value="save" class="btn btn-primary">
-                            
+                                        {{ user_form.as_p }}
+                                        <button type="submit" class="btn btn-primary" style="border-radius: 10rem;">Save Changes</button>
                                     </form>
+                                    <br>
+                                  
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                                    <br>
+                                    <br>
+                                    <p><strong>Last Login:</strong> {{ user.last_login }}</p>
+                                    <br>
+                                    <p><strong>User Role:</strong> {% if user.is_admin %}Administrator{% else %}Regular User{% endif %}</p>
+                                    <br>
+                                    <p><strong>Join Date:</strong> {{ user.date_joined }}</p>
+                                    <br>
+                                    <p><strong>Verification Status:</strong> {% if user.is_active %}Verified{% else %}Not Verified{% endif %}</p>
+                                    <br>
                                 </div>
                             </div> <!-- row -->
                         </div> <!-- card-body -->
@@ -78,5 +47,8 @@
             </div> <!-- row -->
         </div> <!-- container -->
     </section>
+    <br>
+    <br>
+    <br>
   
 {% endblock  %}

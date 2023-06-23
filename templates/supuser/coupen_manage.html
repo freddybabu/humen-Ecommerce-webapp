@@ -94,7 +94,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link d-block" href="{% url 'signout' %}">
-                        Admin, <b>Logout  <i class="fa fa-sign-out" aria-hidden="true"></i></b>
+                         <b>Logout  <i class="fa fa-sign-out" aria-hidden="true"></i></b>
                     </a>
                 </li>
             </ul>
@@ -135,7 +135,7 @@
                     <div class="d-flex justify-content-between">
                         <a href="{% url 'edit_coupens' coupon.id %}" class="btn btn-sm btn-primary" style="border-radius: 10rem;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                         <form action="{% url 'del_coupens' coupon.id %}" method="post" class="d-inline">{% csrf_token %}
-                            <input type="submit" class="btn btn-danger btn-sm" style="border-radius: 10rem; margin-left:5px" onclick="return confirm('Are you sure you want to Delete this Coupon?')" value="Delete">
+                            <input type="submit" class="btn btn-danger btn-sm" style="border-radius: 10rem; margin-left:5px" onclick="return confirmDelete(event)" value="Delete">
                         </form>
                     </div>
                 </td>
@@ -145,5 +145,25 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    function confirmDelete(event) {
+        event.preventDefault(); // Prevent the form from immediately submitting
+        var form = event.target.closest('form'); // Find the closest form element
+    
+        swal({
+            title: "Do you really want to delete?",
+            icon: "warning",
+            buttons: {
+                cancel: "No",
+                confirm: "Yes"
+            },
+        }).then(function (confirmed) {
+            if (confirmed) {
+                form.submit(); // Submit the form
+            }
+        });
+    }
+</script>
   
 {% endblock  %}

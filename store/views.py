@@ -1,4 +1,5 @@
-
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 from carts.views import _cart_id
 from django.shortcuts import render, get_object_or_404
 from .models import Product,ProductImage
@@ -72,3 +73,16 @@ def search(request):
         'product_count': product_count,
     }
     return render(request, 'store/store.html', context)
+
+
+
+def filter_data(request):
+    minPrice=request.GET['minPrice']
+    maxPrice=request.GET['maxPrice']
+    allProducts = Product.objects.all().order_by('-id').distinct()
+    allProducts = allProducts.filter(price__gte=minPrice)
+    allProducts = allProducts.filter(price__lte=maxPrice)
+
+    t=render_to_string('store/store.html',{'data':allProducts})
+    return JsonResponse({'data':t})
+    
