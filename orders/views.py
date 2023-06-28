@@ -207,6 +207,7 @@ def cash_on_delivery(request):
     orderproduct = OrderProduct.objects.filter(order_id =order.id)
     shipping_charge = 40
     sub_total = 0
+    grand_total =0
     for item in orderproduct:
         sub_total = item.product_price*item.quantity
         

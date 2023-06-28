@@ -52,12 +52,13 @@ def supuser(request):
             "users_count": users_count,
             'dates': dates,
             'sales': sales,
-            'sums': sums,
+            'sums': sums
         }
         return render(request, 'supuser/suphome.html', context)
     else:
         return redirect('signin')
 
+# ================================== USER MANAGE =========================================================== #
 
 def usermanage(request):
     if 'email' in request.session:
@@ -85,6 +86,7 @@ def unblock_user(request, id):
         pi.save()
         return redirect('manage')
 
+# ============================================ CATEGORY MANAGE ================================================
 
 def categorymanage(request):
     if 'email' in request.session:
@@ -116,6 +118,7 @@ def del_category(request, id):
         crt.delete()
     return redirect('categorymanage')
 
+# ======================================== PRODUCT MANAGE =====================================================
 
 def productmanage(request):
     if 'email' in request.session:
@@ -175,6 +178,7 @@ def edit_product(request, id):
     }
     return render(request, 'supuser/edit_product.html', context)
 
+# ================================================= VARIATION MANAGE ============================================
 
 def Variationmanage(request):
     if 'email' in request.session:

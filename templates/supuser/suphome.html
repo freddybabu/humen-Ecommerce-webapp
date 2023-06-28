@@ -23,21 +23,7 @@
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <!-- <li class="nav-item dropdown">
-
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <i class="far fa-file-alt"></i>
-                                <span>
-                                    Reports <i class="fas fa-angle-down"></i>
-                                </span>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Daily Report</a>
-                                <a class="dropdown-item" href="#">Weekly Report</a>
-                                <a class="dropdown-item" href="#">Yearly Report</a>
-                            </div>
-                        </li> -->
+                        
                         <li class="nav-item">
                           <a class="nav-link" href="{% url 'manage' %}">
                              <i class="fa fa-user-plus" aria-hidden="true"></i>
@@ -74,20 +60,7 @@
                                 Coupons
                             </a>
                         </li>
-                        <!-- <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-cog"></i>
-                                <span>
-                                    Settings <i class="fas fa-angle-down"></i>
-                                </span>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Profile</a>
-                                <a class="dropdown-item" href="#">Billing</a>
-                                <a class="dropdown-item" href="#">Customize</a>
-                            </div>
-                        </li> -->
+                        
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -100,328 +73,207 @@
             </div>
 
         </nav>
-          <!-- Recent Sales Start -->
-  <div class="container-fluid pt-4 px-4">
-    <div class="bg-light text-center rounded p-4">
-        <div class="d-flex align-items-center justify-content-between mb-0">
-            <h5 class="mb-0">Recent Orders</h5>
-            <a href="{% url 'orderslist' %}">Show All</a>
-        </div>
-        <div class="bg-light text-center rounded p-4">
-            <div class="d-md-flex d-grid align-items-center justify-content-between mb-4">
-                {% comment %} <form class="form-inline d-flex my-1 align-items-center justify-content-between" style="width:70%;"> {% endcomment %}
-                <div>
-                    <h6 class="mb-0">From</h6>
-                    <input class="form-control" type="date" name="from" id="from">
-                </div>
-                <div>
-                    <h6 class="mb-0">To</h6>
-                    <input class="form-control" type="date" name="to" id="to">
-                </div>
-                <button class="btn btn-primary" onclick="applyfilter()" style="border-radius: 10rem;">Go</button>
-                {% comment %} </form> {% endcomment %}
-            <div>
-                <select class="float-right form-control" id="export-options" onchange="exportData()" style="border-radius: 10rem;">
-                    <option value=" ">Choose option</option>
-                    <option value="excel">Export to Excel</option>
-                    <option value="pdf">Download PDF</option>
-                </select>
-            </div>
-        </div>
-        </div>
-        <div class="table-responsive">
-            {% if orders %}
-<table id="orders-table" class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Order Number</th>
-        <th scope="col">Ordered User</th>
-        <th scope="col">Price</th>
-        <th scope="col">Created At</th>
-        <th scope="col">Status </th>
-        
-      </tr>
-    </thead>
-    <tbody id="tbody">
-    {% for order in orders %}
-      <tr>
-        <th scope="row">{{order.order_number}}</a></th>
-        <td>{{order.first_name}}</td>
-        <td>{{order.order_total}}</td>
-        <td>{{order.created_at}}</td>
-        <td>{{order.status}}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-{% else %}
-    <h3 class="text-center alert alert-warning ">No Records Found</h3>
-{% endif %}
-        </div>
-    </div>
-</div>
-<!-- Recent Sales End -->
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <p class="text-white mt-5 mb-5">Welcome back, <b>Admin</b></p>
-                </div>
-            </div>
-            <!-- row -->
-            <div class="row tm-content-row">
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block">
-                        <h2 class="tm-block-title">Latest Hits</h2>
-                        <canvas id="lineChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block">
-                        <h2 class="tm-block-title">Performance</h2>
-                        <canvas id="barChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block tm-block-taller">
-                        <h2 class="tm-block-title">Storage Information</h2>
-                        <div id="pieChartContainer">
-                            <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
-                        </div>                        
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
-                        <h2 class="tm-block-title">Notification List</h2>
-                        <div class="tm-notification-items">
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-01.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Jessica</b> and <b>6 others</b> sent you new <a href="#"
-                                            class="tm-notification-link">product updates</a>. Check new orders.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-02.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Oliver Too</b> and <b>6 others</b> sent you existing <a href="#"
-                                            class="tm-notification-link">product updates</a>. Read more reports.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-03.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Victoria</b> and <b>6 others</b> sent you <a href="#"
-                                            class="tm-notification-link">order updates</a>. Read order information.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-01.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Laura Cute</b> and <b>6 others</b> sent you <a href="#"
-                                            class="tm-notification-link">product records</a>.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-02.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Samantha</b> and <b>6 others</b> sent you <a href="#"
-                                            class="tm-notification-link">order stuffs</a>.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-03.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Sophie</b> and <b>6 others</b> sent you <a href="#"
-                                            class="tm-notification-link">product updates</a>.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-01.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Lily A</b> and <b>6 others</b> sent you <a href="#"
-                                            class="tm-notification-link">product updates</a>.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-02.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Amara</b> and <b>6 others</b> sent you <a href="#"
-                                            class="tm-notification-link">product updates</a>.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
-                            <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'super/img/notification-03.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                                <div class="media-body">
-                                    <p class="mb-2"><b>Cinthela</b> and <b>6 others</b> sent you <a href="#"
-                                            class="tm-notification-link">product updates</a>.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                </div>
-                            </div>
+
+        <div class="container mt-2">
+                <!-- statistics data -->
+            <div class="statistics mt-2 mb-2">
+                <div class="row">
+                <div class="col-xl-6 pr-xl-2">
+                    <div class="row">
+                    <div class="col-sm-6 pr-sm-2 statistics-grid">
+                        <div class="card card_border border-primary-top p-4">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <h3 class="text-primary number">{{users_count}}</h3>
+                        <p class="stat-text">Total Users</p>
                         </div>
                     </div>
+                    <div class="col-sm-6 pl-sm-2 statistics-grid">
+                        <div class="card card_border border-primary-top p-4">
+                            <i class="fa fa-product-hunt" aria-hidden="true"></i>
+                        <h3 class="text-secondary number">{{product_count}}</h3>
+                        <p class="stat-text">Product Count</p>
+                        </div>
+                    </div>
+                    </div>
                 </div>
-                <div class="col-12 tm-block-col">
+                <div class="col-xl-6 pl-xl-2">
+                    <div class="row">
+                    <div class="col-sm-6 pr-sm-2 statistics-grid">
+                        <div class="card card_border border-primary-top p-4">
+                            <i class="fa fa-usd" aria-hidden="true"></i>
+                        <h3 class="text-success number">{{sums}}</h3>
+                        <p class="stat-text">Weekly Revenue</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 pl-sm-2 statistics-grid">
+                        <div class="card card_border border-primary-top p-4">
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        <h3 class="text-danger number">{{total_orders}}</h3>
+                        <p class="stat-text">Total Orders</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- //statistics data -->
+
+                <!-- charts -->
+            <div class="chart">
+                <div class="row">
+                <div class="col-lg-6 pr-lg-2 chart-grid">
+                    <div class="card text-center card_border">
+                    <div class="card-header chart-grid__header">Bar Chart</div>
+                    <div class="card-body">
+                        <!-- bar chart -->
+                        <div id="container">
+                        <canvas id="mybarchart"></canvas>
+                        </div>
+                        <!-- //bar chart -->
+                    </div>
+                    <div class="card-footer text-muted chart-grid__footer">
+                        Updated 2 hours ago
+                    </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 pl-lg-2 chart-grid">
+                    <div class="card text-center card_border">
+                    <div class="card-header chart-grid__header">Line Chart</div>
+                    <div class="card-body">
+                        <!-- line chart -->
+                        <div id="container">
+                        <canvas id="mylinechart"></canvas>
+                        </div>
+                        <!-- //line chart -->
+                    </div>
+                    <div class="card-footer text-muted chart-grid__footer">
+                        Updated just now
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+ 
+                <!-- <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                        <h2 class="tm-block-title">Orders List</h2>
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-md-flex d-grid align-items-center justify-content-between mb-4">
+                                {% comment %} <form class="form-inline d-flex my-1 align-items-center justify-content-between" style="width:70%;"> {% endcomment %}
+                                <div>
+                                    <h6 class="mb-0">From</h6>
+                                    <input class="form-control" type="date" name="from" id="from">
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">To</h6>
+                                    <input class="form-control" type="date" name="to" id="to">
+                                </div>
+                                <button class="btn btn-primary" onclick="applyfilter()" style="border-radius: 10rem;">Go</button>
+                                {% comment %} </form> {% endcomment %}
+                            <div>
+                                <select class="float-right form-control" id="export-options" onchange="exportData()" style="border-radius: 10rem;">
+                                    <option value=" ">Choose option</option>
+                                    <option value="excel">Export to Excel</option>
+                                    <option value="pdf">Download PDF</option>
+                                </select>
+                            </div>
+                            </div>
+                        </div>
+                        <h2 class="tm-block-title">Recent Order List</h2>
+                        <a href="{% url 'orderslist' %}" class="btn btn-primary" style="border-radius: 10rem;">Show All</a>
+                        {% if orders %}
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">ORDER NO.</th>
-                                    <th scope="col">STATUS</th>
-                                    <th scope="col">OPERATORS</th>
-                                    <th scope="col">LOCATION</th>
-                                    <th scope="col">DISTANCE</th>
-                                    <th scope="col">START DATE</th>
-                                    <th scope="col">EST DELIVERY DUE</th>
+                                    <th scope="col">Order Number</th>
+                                    <th scope="col">Ordered User</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Created At</th>
+                                    <th scope="col">Status </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row"><b>#122349</b></th>
-                                    <td>
-                                        <div class="tm-status-circle moving">
-                                        </div>Moving
-                                    </td>
-                                    <td><b>Oliver Trag</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>485 km</b></td>
-                                    <td>16:00, 12 NOV 2018</td>
-                                    <td>08:00, 18 NOV 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122348</b></th>
-                                    <td>
-                                        <div class="tm-status-circle pending">
-                                        </div>Pending
-                                    </td>
-                                    <td><b>Jacob Miller</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>360 km</b></td>
-                                    <td>11:00, 10 NOV 2018</td>
-                                    <td>04:00, 14 NOV 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122347</b></th>
-                                    <td>
-                                        <div class="tm-status-circle cancelled">
-                                        </div>Cancelled
-                                    </td>
-                                    <td><b>George Wilson</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>340 km</b></td>
-                                    <td>12:00, 22 NOV 2018</td>
-                                    <td>06:00, 28 NOV 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122346</b></th>
-                                    <td>
-                                        <div class="tm-status-circle moving">
-                                        </div>Moving
-                                    </td>
-                                    <td><b>William Aung</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>218 km</b></td>
-                                    <td>15:00, 10 NOV 2018</td>
-                                    <td>09:00, 14 NOV 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122345</b></th>
-                                    <td>
-                                        <div class="tm-status-circle pending">
-                                        </div>Pending
-                                    </td>
-                                    <td><b>Harry Ryan</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>280 km</b></td>
-                                    <td>15:00, 11 NOV 2018</td>
-                                    <td>09:00, 17 NOV 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122344</b></th>
-                                    <td>
-                                        <div class="tm-status-circle pending">
-                                        </div>Pending
-                                    </td>
-                                    <td><b>Michael Jones</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>218 km</b></td>
-                                    <td>18:00, 12 OCT 2018</td>
-                                    <td>06:00, 18 OCT 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122343</b></th>
-                                    <td>
-                                        <div class="tm-status-circle moving">
-                                        </div>Moving
-                                    </td>
-                                    <td><b>Timmy Davis</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>218 km</b></td>
-                                    <td>12:00, 10 OCT 2018</td>
-                                    <td>08:00, 18 OCT 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122342</b></th>
-                                    <td>
-                                        <div class="tm-status-circle moving">
-                                        </div>Moving
-                                    </td>
-                                    <td><b>Oscar Phyo</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>420 km</b></td>
-                                    <td>15:30, 06 OCT 2018</td>
-                                    <td>09:30, 16 OCT 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122341</b></th>
-                                    <td>
-                                        <div class="tm-status-circle moving">
-                                        </div>Moving
-                                    </td>
-                                    <td><b>Charlie Brown</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>300 km</b></td>
-                                    <td>11:00, 10 OCT 2018</td>
-                                    <td>03:00, 14 OCT 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122340</b></th>
-                                    <td>
-                                        <div class="tm-status-circle cancelled">
-                                        </div>Cancelled
-                                    </td>
-                                    <td><b>Wilson Cookies</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>218 km</b></td>
-                                    <td>17:30, 12 OCT 2018</td>
-                                    <td>08:30, 22 OCT 2018</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><b>#122339</b></th>
-                                    <td>
-                                        <div class="tm-status-circle moving">
-                                        </div>Moving
-                                    </td>
-                                    <td><b>Richard Clamon</b></td>
-                                    <td><b>London, UK</b></td>
-                                    <td><b>150 km</b></td>
-                                    <td>15:00, 12 OCT 2018</td>
-                                    <td>09:20, 26 OCT 2018</td>
+                                 {% for order in orders %}
+                                    <tr>
+                                      <th scope="row">{{order.order_number}}</a></th>
+                                      <td>{{order.first_name}}</td>
+                                      <td>{{order.order_total}}</td>
+                                      <td>{{order.created_at}}</td>
+                                      <td>{{order.status}}</td>
+                                    </tr>
+                                  {% endfor %}
                                 </tr>
                             </tbody>
                         </table>
+                        {% else %}
+                        <h3 class="text-center alert alert-warning ">No Records Found</h3>
+                        {% endif %}
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
+
+         <!-- Recent Sales Start -->
+  <div class="container pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+       <div class="d-flex align-items-center justify-content-between mb-0">
+           <h5 class="mb-0">Recent Orders</h5>
+           <a href="{% url 'orderslist' %}">Show All</a>
+       </div>
+       <div class="bg-light text-center rounded p-4">
+           <div class="d-md-flex d-grid align-items-center justify-content-between mb-4">
+               {% comment %} <form class="form-inline d-flex my-1 align-items-center justify-content-between" style="width:70%;"> {% endcomment %}
+               <div>
+                   <h6 class="mb-0">From</h6>
+                   <input class="form-control" type="date" name="from" id="from">
+               </div>
+               <div>
+                   <h6 class="mb-0">To</h6>
+                   <input class="form-control" type="date" name="to" id="to">
+               </div>
+               <button class="btn btn-primary" onclick="applyfilter()" style="border-radius: 10rem;">Go</button>
+               {% comment %} </form> {% endcomment %}
+           <div>
+               <select class="float-right form-control" id="export-options" onchange="exportData()" style="padding: 16px 18px;border-radius:10rem">
+                   <option value=" ">Choose option</option>
+                   <option value="excel">Export to Excel</option>
+                   <option value="pdf">Download PDF</option>
+               </select>
+           </div>
+           </div>
+       </div>
+       <div class="table-responsive">
+           {% if orders %}
+           <table id="orders-table" class="table table-hover">
+               <thead>
+               <tr>
+                   <th scope="col">Order Number</th>
+                   <th scope="col">Ordered User</th>
+                   <th scope="col">Price</th>
+                   <th scope="col">Created At</th>
+                   <th scope="col">Status </th>
+                   
+               </tr>
+               </thead>
+               <tbody id="tbody">
+               {% for order in orders %}
+               <tr>
+                   <th scope="row">{{order.order_number}}</a></th>
+                   <td>{{order.first_name}}</td>
+                   <td>{{order.order_total}}</td>
+                   <td>{{order.created_at}}</td>
+                   <td>{{order.status}}</td>
+               </tr>
+               {% endfor %}
+               </tbody>
+           </table>
+           {% else %}
+               <h3 class="text-center alert alert-warning ">No Records Found</h3>
+           {% endif %}
+       </div>
+   </div>
+</div>
+<!-- Recent Sales End -->
         <footer class="tm-footer row tm-mt-small">
             <div class="col-12 font-weight-light">
                 <p class="text-center text-white mb-0 px-4 small">

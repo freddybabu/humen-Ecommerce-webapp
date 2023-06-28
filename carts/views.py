@@ -179,7 +179,7 @@ def cart(request,total=0, quantity=0, cart_items =None):
     context = {
         'total':total,
         'quantity':quantity,
-        'cart_items':cart_items,
+        'cart_items':cart_items
     }
          
     return render(request,'store/cart.html', context)
@@ -222,6 +222,7 @@ def checkout(request,total=0, quantity=0):
     }
     return render(request,'store/checkout.html', context)
 
+
 @require_POST
 def apply_coupon(request):
     body = json.loads(request.body)
@@ -241,11 +242,13 @@ def apply_coupon(request):
         valid_to = coupon.expiry_date
         min_amount = int(coupon.min_amount)
         if min_amount < grand_total and valid_from <= today <= valid_to:
-            grand_total = grand_total - int(coupon.discount)
+            discount_amount = int(coupon.discount)
+            grand_total -= discount_amount
             request.session['total'] = grand_total  # Update the session variable
             data = {
                 "total": grand_total,
-                "message": f"{coupon.code} Applied"
+                "message": f"{coupon.code} Applied",
+                "discount_amount": discount_amount,
             }
         else:
             data = {

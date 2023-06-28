@@ -194,6 +194,9 @@
             </div>
             {% endif %}
         </div>
+        {% if  not cart_items %}
+          
+        {% else %}
         <div class="cart-btn">
             <div class="col-lg-6">
                 <div class="cart__discount text-center">
@@ -204,6 +207,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div class="shopping-method">
             <div class="container">
                 <div class="row">
@@ -215,7 +219,7 @@
                                         <tr>
                                             <!-- <th>Total</th> -->
                                             <!-- <th>Tax</th> -->
-                                            <!-- <th>Shipping</th> -->
+                                            <!-- <th>Discount Amount</th> -->
                                             <th class="total-cart">Total Cart</th>
                                         </tr>
                                     </thead>
@@ -223,7 +227,7 @@
                                         <tr>
                                             <!-- <td class="total">Rs. {{total}}</td> -->
                                             <!-- <td class="sub-total">Rs. {{tax}}</td> -->
-                                            <!-- <td class="shipping">Rs. {{shipping_charge}}</td> -->
+                                            <!-- <td class="shipping">$. {{discount_amount}}</td> -->
                                             <td class="total-cart-p" id="grand_total">$ {{total}}</td>
                                         </tr>
                                     </tbody>

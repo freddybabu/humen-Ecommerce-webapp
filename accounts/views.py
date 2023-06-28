@@ -27,6 +27,10 @@ from twilio.rest import Client
 from accounts.verify import send, check
 
 
+
+def error_404_view(request,exception):
+    return render(request,'404.html')
+################################################################################################################
 @never_cache
 def register(request):
     form = RegistrationForm()

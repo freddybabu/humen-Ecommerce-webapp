@@ -125,7 +125,7 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="single-features-ads first">
-                            <img src="{% static 'img/icons/f-delivery.png' %}" alt="">
+                            <img src="{% static 'img/icons/f-delivery.png' %}" alt="delivery-icon">
                             <h4>Free shipping</h4>
                             <p>Fusce urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal
                                 esuada aliquet libero viverra cursus. </p>
@@ -133,7 +133,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="single-features-ads second">
-                            <img src="{% static 'img/icons/coin.png' %}" alt="">
+                            <img src="{% static 'img/icons/coin.png' %}" alt="image">
                             <h4>100% Money back </h4>
                             <p>Urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal esuada
                                 aliquet libero viverra cursus. </p>
@@ -220,13 +220,7 @@
                     <div class="single-product-item">
                         <figure>
                             <a href="{{ product.get_url }}"><img src="{{product.images.url}}" alt="image"></a>
-                            <div class="p-status">new
-                                {% if item.product.id in wishlist_items_ids %}
-                                <a href="{% url 'add_to_wishlist' product_id=product.id %}" style="color:white;"><i class="fa-sharp fa-solid fa-heart fa-flip fa-xl"></i></a>
-                                {% else %}
-                                <a href="{% url 'add_to_wishlist' product_id=product.id %}" style="color: red;"><i class="fa-sharp fa-solid fa-heart fa-flip fa-xl"></i></a>
-                                {% endif %}
-                            </div>
+                            <div class="p-status">new</div>
                         </figure>
                         <div class="product-text">
                             <a href="{{ product.get_url }}" class="title text-dark">{{product.product_name}}</a>
@@ -236,6 +230,7 @@
                                 {% else %}
                                 <p>$ {{product.price}}</p>  
                             {% endif %} </h5>
+                            <p><a href="{% url 'add_to_wishlist' product_id=product.id %}" class="btn btn-primary" style="border-radius: 10rem;">Add to whislist</a></p>
                             
                         </div>
                     </div>

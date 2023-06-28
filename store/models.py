@@ -69,9 +69,7 @@ class Variation(models.Model):
     
     def __str__(self) -> str:
         return self.variation_value
-    
-        
-    
+      
 class Wishlist(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
