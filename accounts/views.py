@@ -473,3 +473,15 @@ def change_password(request):
  
 def contact(request):
     return render(request,'accounts/contact.html')       
+
+
+
+@login_required(login_url='signin')
+def remove_address(request, address_id):
+    address = AddressBook.objects.get(id=address_id)
+    if address.user == request.user:
+        address.delete()
+        messages.success(request, "Address removed successfully")
+    else:
+        messages.error(request, "You don't have permission to remove this address")
+    return redirect('my_addresses')

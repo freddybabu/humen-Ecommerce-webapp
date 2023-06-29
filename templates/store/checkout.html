@@ -45,13 +45,13 @@
                             {% if address.status %}
                             <div class="card-footer">
                                 <i class = "fa fa-check-circle text-success check{{address.id}} check"></i>
-                                <button style="display: none;" data-address="{{address.id}}" class="btn btn-sm btn-info activate-address btn{{address.id}} actbtn" onclick="changeAdd( '{{address.first_name}}', '{{address.last_name}}', '{{address.address_line_1}}', '{{address.address_line_2}}', '{{address.city}}', '{{address.state}}', '{{address.country}}', '{{address.pincode}}', '{{address.phone}}', '{{address.email}}')">Make default</button>
+                                <button style="display: none;" data-address="{{address.id}}" class="btn btn-sm btn-info activate-address btn{{address.id}} actbtn" onclick="changeAdd( '{{address.first_name}}', '{{address.last_name}}', '{{address.address_line_1}}', '{{address.address_line_2}}', '{{address.city}}', '{{address.state}}', '{{address.country}}', '{{address.pincode}}', '{{address.phone}}', '{{address.email}}')">Choose</button>
 
                             </div>
                             {% else %}
                             <div class="card-footer footer{{address.id}}">
                                 <i style="display:none;" class = "fa fa-check-circle text-success check{{address.id}} check"></i>
-                                <button data-address="{{address.id}}" class="btn btn-sm btn-info activate-address btn{{address.id}} actbtn" onclick="changeAdd( '{{address.first_name}}', '{{address.last_name}}', '{{address.address_line_1}}', '{{address.address_line_2}}', '{{address.city}}', '{{address.state}}', '{{address.country}}', '{{address.pincode}}', '{{address.phone}}', '{{address.email}}')">Make default</button>
+                                <button data-address="{{address.id}}" class="btn btn-sm btn-info activate-address btn{{address.id}} actbtn" onclick="changeAdd( '{{address.first_name}}', '{{address.last_name}}', '{{address.address_line_1}}', '{{address.address_line_2}}', '{{address.city}}', '{{address.state}}', '{{address.country}}', '{{address.pincode}}', '{{address.phone}}', '{{address.email}}')">Choose</button>
                             </div>
                             {% endif %}
                         </div>

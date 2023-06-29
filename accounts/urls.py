@@ -8,7 +8,7 @@ urlpatterns = [
     path('signout/',views.signout, name='signout'),
     path('ver',views.verify_code, name='ver'),
     
-    path('forgotpassword',views.forgotpassword,name='forgotpassword'),
+    path('forgotpassword/',views.forgotpassword,name='forgotpassword'),
     path('resetpassword_validate/<uidb64>/<token>/',views.resetpassword_validate,name='resetpassword-validate'),
     path('resetpassword',views.resetpassword,name='resetpassword'),
     
@@ -28,6 +28,7 @@ urlpatterns = [
     path('activate-address/',views.activate_address,name='activate-address'),
     path('edit_profile/',views.edit_profile,name='edit_profile'),
     path('change_password/',views.change_password,name='change_password'),
+    path('remove_address/<int:address_id>/',views.remove_address,name='remove_address'),
     
     path('contact/',views.contact,name='contact'),
     

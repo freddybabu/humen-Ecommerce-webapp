@@ -35,6 +35,9 @@
                                 <i class = "fa fa-check-circle text-success check{{address.id}} check"></i>
                                 <button style="display:none;" data-address="{{address.id}}" class="btn btn-sm btn-info activate-address btn{{address.id}} actbtn" >Make default</button>
                             </div>
+                            <div class="card-footer">
+                                <a href="{% url 'remove_address' address.id %}" class="btn btn-danger">Remove</a>
+                            </div>
                             {% else %}
                             <div class="card-footer footer{{address.id}}">
                                 <i style="display: none;" class="fa fa-check-circle text-success check{{address.id}} check"></i>
