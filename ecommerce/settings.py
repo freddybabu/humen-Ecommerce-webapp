@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -86,14 +86,25 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME':  'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '9744733924',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'myproject',
+        'USER': 'myprojectuser',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
+
+#DATABASES = {
+   # 'default': {
+       # 'ENGINE': 'django.db.backends.postgresql',
+      #  'NAME':  'postgres',
+     #   'USER': 'postgres',
+    #    'PASSWORD': '9744733924',
+   #     'HOST': 'localhost',
+  #      'PORT': '5432',
+ #   }
+#}
 
 
 # Password validation
@@ -128,13 +139,10 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
+# https://docs.djangoproject.com/en/4.2/howto/static-files
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_DIRS = [
-    'ecommerce/static',
-]
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'ecommerce/static')
 
 # media fiels configuration
 
