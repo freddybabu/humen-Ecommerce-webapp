@@ -12,9 +12,9 @@ class CategoryForm(forms.ModelForm):
        fields = ["category_name","slug","description"]
        widgets = {
              'category_name':forms.TextInput(attrs={'class':'form-control'}),
-           'slug' : forms.TextInput(attrs={'class':'form-control'}),
-           'description': forms.Textarea(attrs={'class':'form-control'}),
-        }
+             'slug' : forms.TextInput(attrs={'class':'form-control'}),
+             'description': forms.Textarea(attrs={'class':'form-control'}),
+       }
        
 
 
