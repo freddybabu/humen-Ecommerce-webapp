@@ -293,7 +293,7 @@ def my_orders(request):
 
 #############################################################################################################
 
-
+@login_required(login_url='signin')
 def whishlist(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
     context = {
