@@ -120,14 +120,7 @@
                     <ul>
                         <li><a class="active" href="{% url 'home' %}">Home</a></li>
                         <li><a href="{% url 'store' %}">Shop</a></li>
-                        <!-- <li><a href="./product-page.html">All Category</a>
-                            <ul class="sub-menu">
-                                <li><a href="{% url 'store' %}">All Products</a></li>
-                                {% for category in links %}
-                                  <li><a href="{{category.get_url}}">{{category.category_name}}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </li> -->
+                       
                         <li><a class="{% if 'wishlist' in request.path %}active{% endif %}" href="{% url 'wishlist' %}">Wishlist</a></li>
                         <li><a href="{% url 'cart' %}">Cart</a></li>
                         <!-- <li><a href="{% url 'my_orders' %}">Orders</a></li> -->

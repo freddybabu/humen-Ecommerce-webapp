@@ -205,7 +205,6 @@
                             <h2>Latest Products</h2>
                         </div>
                         <ul class="product-controls">
-                            <!-- <a href="{% url 'store' %}"><li data-filter="*">All  </li></a> -->
                             {% for category in links %}
                             <li data-filter=".dresses"><a href="{{category.get_url}}" class="text-dark">{{category.category_name}}</a></li>
                             {% endfor %}
