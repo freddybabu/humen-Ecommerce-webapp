@@ -341,7 +341,6 @@ def cancel_order(request, order_id):
 
     if order.status == 'Cancelled':
         messages.warning(request, 'This order has already been cancelled.')
-        wallet = Wallet.objects.get(user=request.user)  # Retrieve the wallet object
     else:
         # Iterate over the order items
         for order_product in order.orderproduct_set.all():
@@ -353,16 +352,12 @@ def cancel_order(request, order_id):
         order.status = 'Cancelled'
         order.save()
 
-        wallet, created = Wallet.objects.get_or_create(user=request.user)
+        wallet, created = Wallet.objects.get_or_create(user=order.user)
         wallet.balance += order.order_total
         wallet.save()
         messages.success(request, 'Order successfully cancelled.')
-    print(wallet.balance)
-    context = {'wallet': wallet}
-    return render(request, 'accounts/dashboard.html', context)
+    return redirect('my_orders')
 
-
-    # return redirect('my_orders')
 
 #################################################################################################################
 

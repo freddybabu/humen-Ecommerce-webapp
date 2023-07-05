@@ -163,6 +163,9 @@ def remove_cart_item(request,product_id,cart_item_id):
     return redirect('cart')
 
 def cart(request,total=0, quantity=0, cart_items =None):
+    grand_total = 0
+    shipping_charge = 40
+    coupons =None
     try:
         if request.user.is_authenticated:
             cart_items = CartItem.objects.filter(user=request.user,is_active=True)
@@ -170,25 +173,32 @@ def cart(request,total=0, quantity=0, cart_items =None):
         else:
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart,is_active=True)
+            coupons = Coupon.objects.all()
         for cart_item in cart_items:
             total += (cart_item.product.price*cart_item.quantity)
             quantity += cart_item.quantity
+        grand_total = total + shipping_charge
     except ObjectDoesNotExist:
            pass
     
     context = {
         'total':total,
         'quantity':quantity,
-        'cart_items':cart_items
+        'cart_items':cart_items,
+        'shipping_charge':shipping_charge,
+        'grand_total':grand_total,
+        'coupons':coupons
     }
          
     return render(request,'store/cart.html', context)
 
 
 @login_required(login_url='signin')
-def checkout(request,total=0, quantity=0):
+def checkout(request):
+    total = 0
+    quantity = 0
     grand_total = 0
-    shipping_charge = 0
+    shipping_charge = 40
     cart_items = None
     try:
         if request.user.is_authenticated:
@@ -199,11 +209,10 @@ def checkout(request,total=0, quantity=0):
         for cart_item in cart_items:
             total += (cart_item.product.price*cart_item.quantity)
             quantity += cart_item.quantity
-        shipping_charge = 40
         grand_total = total + shipping_charge
         
-        if(request.session.get('total')):
-            grand_total=request.session.get('total')
+        # if(request.session.get('total')):
+        #     grand_total=request.session.get('total')
         
         addresses = AddressBook.objects.filter(user=request.user).order_by('-id')
         cadd  = AddressBook.objects.filter(user=request.user,status=True).first()
@@ -214,11 +223,11 @@ def checkout(request,total=0, quantity=0):
     context = {
         'total':total,
         'quantity':quantity,
+        'shipping_charge':shipping_charge,
         'cart_items':cart_items,
         'grand_total':grand_total,
-        'shipping_charge':shipping_charge,
         'addresses':addresses,
-        'cadd':cadd
+        'cadd':cadd,
     }
     return render(request,'store/checkout.html', context)
 

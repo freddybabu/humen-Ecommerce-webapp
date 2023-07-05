@@ -42,6 +42,20 @@
     button {
         padding: 5px 10px;
     }
+
+    .pagination {
+        text-align: right;
+      }
+      
+      .pagination a {
+        color: white;
+        margin-left: 10px;
+      }
+      
+      .pagination .current-page {
+        font-weight: bold;
+      }
+      
 </style>
 
 <nav class="navbar navbar-expand-xl">
@@ -112,6 +126,23 @@
 
 </nav>
 
+
+<div class="pagination mt-2" style="margin-left:80rem">
+    <span class="step-links">
+        {% if orders.has_previous %}
+            <a class="text-white" href="?page={{ orders.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current-page" style="color: #f5a623;">{{ orders.number }}</span>
+
+        {% if orders.has_next %}
+            <a class="text-white" href="?page={{ orders.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+
+
 <div class = "p-5">
     <div class="order-list-container"  style = "padding-left:50px" >
       <h1>Order List</h1>
@@ -137,17 +168,18 @@
                   <td class="status-{{ order.status|lower }}">{{ order.status }}</td>
                   <td>{{ order.created_at }}</td>
                   <td>
-                      <form method="POST" action="{% url 'change_status' order.id %}">
-                          {% csrf_token %}
-                          <select name="status" style="border-radius: 10rem;">
-                              <option value="New" style="border-radius: 10rem;">New</option>
-                              <option value="Accepted" style="border-radius: 10rem;">Accepted</option>
-                              <option value="Completed"  style="border-radius: 10rem;">Completed</option>
-                              <option value="Cancelled" style="border-radius: 10rem;">Cancelled</option>
-                          </select>
-                          <button type="submit" style="border-radius: 10rem;background-color:#f5a623">Change</button>
-                      </form>
-                  </td>
+                    <form method="POST" action="{% url 'change_status' order.id %}">
+                        {% csrf_token %}
+                        <select name="status" style="border-radius: 10rem;">
+                            <option value="New" {% if order.status == 'New' %}selected{% endif %}>New</option>
+                            <option value="Accepted" {% if order.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                            <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                            <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                        <button type="submit" style="border-radius: 10rem;background-color:#f5a623">Change</button>
+                    </form>
+                 </td>
+                
               </tr>
               {% endfor %}
           </tbody>

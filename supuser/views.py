@@ -10,6 +10,7 @@ from store.models import Product, ProductImage, Variation
 from supuser.forms import CategoryForm, ProductForm, VariationForm, images,CouponForm
 from datetime import datetime,timedelta,timezone
 from supuser.models import Coupon
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 # Create your views here.
 
 
@@ -58,12 +59,16 @@ def supuser(request):
     else:
         return redirect('signin')
 
-# ================================== USER MANAGE =========================================================== #
+#================================== USER MANAGE =========================================================== #
 
 def usermanage(request):
     if 'email' in request.session:
-        users = Account.objects.filter(
-            is_superadmin=False).order_by('id').reverse()
+        user_list = Account.objects.filter(is_superadmin=False).order_by('id').reverse()
+        paginator = Paginator(user_list, 6)  # Display 10 users per page
+
+        page_number = request.GET.get('page')
+        users = paginator.get_page(page_number)
+
         context = {
             'users': users,
         }
@@ -86,7 +91,7 @@ def unblock_user(request, id):
         pi.save()
         return redirect('manage')
 
-# ============================================ CATEGORY MANAGE ================================================
+#============================================ CATEGORY MANAGE ================================================
 
 def categorymanage(request):
     if 'email' in request.session:
@@ -118,7 +123,7 @@ def del_category(request, id):
         crt.delete()
     return redirect('categorymanage')
 
-# ======================================== PRODUCT MANAGE =====================================================
+#======================================== PRODUCT MANAGE =====================================================
 
 def productmanage(request):
     if 'email' in request.session:
@@ -178,11 +183,16 @@ def edit_product(request, id):
     }
     return render(request, 'supuser/edit_product.html', context)
 
-# ================================================= VARIATION MANAGE ============================================
+#================================================= VARIATION MANAGE ============================================
 
 def Variationmanage(request):
     if 'email' in request.session:
-        variations = Variation.objects.all()
+        variation_list = Variation.objects.all()
+        paginator = Paginator(variation_list, 5)  # Display 10 variations per page
+
+        page_number = request.GET.get('page')
+        variations = paginator.get_page(page_number)
+
         context = {
             "variations": variations
         }
@@ -226,15 +236,25 @@ def delete_variation(request, id):
         variate.delete()
     return redirect('Variationmanage')
 
-# ============================================= ORDER MANAGE ===================================================
+#============================================= ORDER MANAGE ===================================================
 
 def orderslist(request):
-    orders = Order.objects.all().order_by('-created_at')
+    order_list = Order.objects.all().order_by('-created_at')
+    paginator = Paginator(order_list, 10)  # Number of orders per page
+
+    page = request.GET.get('page')
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
 
     context = {
         'orders': orders,
     }
     return render(request, 'supuser/orders_list.html', context)
+
 
 
 def order_details_admin(request, order_id):
@@ -275,7 +295,7 @@ def change_status(request, order_id):
             pass
     return redirect('orderslist')
 
-# ================================= COUPON MANAGE ====================================================================================
+#================================= COUPON MANAGE ====================================================================================
 
 def coupen_manage(request):
     coupens = Coupon.objects.all()

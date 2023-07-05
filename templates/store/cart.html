@@ -209,6 +209,8 @@
                         <button  onclick="applycoupon()" style='background-color: black; color: #fff; padding: 10px 20px; margin-left: 5px;'>Apply</button>
                         <h6 id="coupon_id" style="padding-top:1rem;" ></h6>
                 </div>
+                
+
             </div>
         </div>
         {% endif %}
@@ -221,18 +223,20 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <!-- <th>Total</th> -->
-                                            <!-- <th>Tax</th> -->
-                                            <!-- <th>Discount Amount</th> -->
-                                            <th class="total-cart">Total Cart</th>
+                                            <th>Total</th>
+                                            <th>Shipping </th>
+                                            <th>Discount Amount</th>
+                                            <th class="total-cart">Grand Cart</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <!-- <td class="total">Rs. {{total}}</td> -->
-                                            <!-- <td class="sub-total">Rs. {{tax}}</td> -->
-                                            <!-- <td class="shipping">$. {{discount_amount}}</td> -->
-                                            <td class="total-cart-p" id="grand_total">$ {{total}}</td>
+                                            <td class="total">$. {{total}}</td>
+                                            <td class="sub-total">$. {{shipping_charge}}</td>
+                                            {% if coupon in coupons  %}
+                                             <td class="shipping">${{coupon.discount_amount}}</td>
+                                            {% endif %}
+                                            <td class="total-cart-p" id="grand_total">$ {{grand_total}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -305,7 +309,7 @@
             const data =await response.json()
             if(data){
                 coupon_id.innerHTML = data.message
-                document.getElementById('grand_total').innerText = `₹ ${data.total}`
+                document.getElementById('grand_total').innerText = `$ ${data.total}`
             }
         });
     }

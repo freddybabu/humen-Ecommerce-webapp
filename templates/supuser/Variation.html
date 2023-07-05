@@ -98,11 +98,28 @@
 
 </nav>
 
+
+<!-- Add this below the table -->
+<div class="pagination mt-2" style="margin-left: 85rem;">
+    <span class="step-links">
+      {% if variations.has_previous %}
+        <a class="text-white" href="?page={{ variations.previous_page_number }}">previous</a>
+      {% endif %}
+  
+      <span class="current-page" style="color: #f5a623;;">{{ variations.number }}</span>
+  
+      {% if variations.has_next %}
+        <a class="text-white" href="?page={{ variations.next_page_number }}">next</a>
+      {% endif %}
+    </span>
+</div>
+  
+
   <div class="container">
     <div class="d-flex justify-content-center mt-4">
         <h2 class="text-white ms-3">Variation Details</h2>
-         <a href = "{% url 'add_variation' %}" class ="btn btn-primary btn-sm" style="border-radius: 10rem;">Add Product</a>
     </div>
+    <a href = "{% url 'add_variation' %}" class ="btn btn-primary btn-sm" style="border-radius: 10rem;margin-left:60rem;">Add Product</a>
     {% if variations %}
     <table class="table table-hover">
       <thead>
